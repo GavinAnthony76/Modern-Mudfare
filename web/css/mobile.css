@@ -1,0 +1,390 @@
+/* Mobile-Responsive Styles */
+
+@media (max-width: 768px) {
+    /* Hide desktop elements */
+    .desktop-only {
+        display: none !important;
+    }
+
+    /* Show mobile elements */
+    .mobile-only {
+        display: block !important;
+    }
+
+    /* Welcome Screen Adjustments */
+    .game-title {
+        font-size: 2rem;
+    }
+
+    .game-subtitle {
+        font-size: 1rem;
+    }
+
+    .menu-btn {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .intro-text {
+        font-size: 0.8rem;
+    }
+
+    /* Character Creation Mobile */
+    .char-creation-container {
+        padding: 1rem;
+        width: 95%;
+    }
+
+    .char-creation-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .class-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .class-card {
+        padding: 1rem;
+    }
+
+    .creation-buttons {
+        flex-direction: column;
+    }
+
+    .creation-buttons button {
+        width: 100%;
+    }
+
+    /* Game Screen Mobile Layout */
+    #game-container {
+        width: 100%;
+    }
+
+    #game-canvas {
+        height: 50%;
+    }
+
+    /* Top Bar Mobile */
+    #top-bar {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .stat-group {
+        width: 100%;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .stat {
+        min-width: unset;
+    }
+
+    .character-info {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .game-controls {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Text Output Mobile */
+    #text-output {
+        max-height: 200px;
+        font-size: 0.85rem;
+    }
+
+    #text-content {
+        font-size: 0.85rem;
+    }
+
+    /* Command Input Mobile */
+    #command-input-area {
+        padding: 0.5rem;
+    }
+
+    #command-input {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    #btn-send-command {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Mobile Touch Controls */
+    #mobile-controls {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--panel-bg);
+        border-top: 2px solid var(--border-color);
+    }
+
+    .dpad {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 2px;
+    }
+
+    .dpad-btn {
+        background: var(--dark-bg);
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+        transition: all 0.1s ease;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .dpad-btn:active {
+        background: var(--primary-color);
+        border-color: var(--secondary-color);
+        transform: scale(0.95);
+    }
+
+    .dpad-up {
+        grid-column: 2;
+        grid-row: 1;
+        border-radius: 4px 4px 0 0;
+    }
+
+    .dpad-left {
+        grid-column: 1;
+        grid-row: 2;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .dpad-center {
+        grid-column: 2;
+        grid-row: 2;
+        background: var(--panel-bg);
+    }
+
+    .dpad-right {
+        grid-column: 3;
+        grid-row: 2;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .dpad-down {
+        grid-column: 2;
+        grid-row: 3;
+        border-radius: 0 0 4px 4px;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        padding: 1rem 1.5rem;
+        background: var(--primary-color);
+        border: 2px solid var(--secondary-color);
+        border-radius: 4px;
+        color: var(--text-primary);
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        touch-action: manipulation;
+        user-select: none;
+        transition: all 0.1s ease;
+        min-width: 100px;
+        min-height: 44px;
+    }
+
+    .action-btn:active {
+        background: var(--secondary-color);
+        transform: scale(0.95);
+    }
+
+    /* About Screen Mobile */
+    .about-container {
+        width: 95%;
+        padding: 1rem;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    .about-content {
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet Adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    #side-panel {
+        width: 250px;
+    }
+
+    .game-title {
+        font-size: 2.5rem;
+    }
+
+    .class-selection {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.5rem;
+    }
+
+    .game-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .menu-btn {
+        font-size: 0.9rem;
+        padding: 0.7rem 1.2rem;
+    }
+
+    .intro-text {
+        font-size: 0.75rem;
+    }
+
+    #game-canvas {
+        height: 40%;
+    }
+
+    #text-output {
+        max-height: 150px;
+    }
+
+    .dpad {
+        width: 120px;
+        height: 120px;
+    }
+
+    .dpad-btn {
+        font-size: 1rem;
+    }
+
+    .action-btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Landscape Mode Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    #game-canvas {
+        height: 70%;
+    }
+
+    #text-output {
+        max-height: 100px;
+    }
+
+    #mobile-controls {
+        padding: 0.5rem;
+    }
+
+    .dpad {
+        width: 100px;
+        height: 100px;
+    }
+
+    .action-buttons {
+        flex-direction: row;
+    }
+
+    .action-btn {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Touch Optimization */
+@media (hover: none) and (pointer: coarse) {
+    /* Ensure all interactive elements are touch-friendly */
+    button,
+    .class-card,
+    .inventory-slot,
+    .suggestion {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Remove hover effects on touch devices */
+    .menu-btn:hover,
+    .class-card:hover,
+    .icon-btn:hover,
+    .panel-tab:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Add active states for touch feedback */
+    .menu-btn:active {
+        transform: scale(0.98);
+    }
+
+    .class-card:active {
+        transform: scale(0.98);
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    #game-canvas {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Accessibility - Prefer Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .loading-spinner {
+        animation: none;
+        border-top-color: var(--secondary-color);
+    }
+}
+
+/* Dark Mode Support (if user has dark mode preference) */
+@media (prefers-color-scheme: dark) {
+    /* Already dark by default, but can add overrides if needed */
+}
+
+/* Print Styles (for documentation, etc.) */
+@media print {
+    #mobile-controls,
+    #game-canvas,
+    .game-controls,
+    #command-input-area {
+        display: none;
+    }
+
+    #text-output {
+        max-height: none;
+        overflow: visible;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+}
