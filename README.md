@@ -34,7 +34,7 @@ A graphical Multi-User Dungeon (MUD) game set in a biblical fantasy world, featu
 - Git
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 
-### Installation
+### Automated Setup
 
 1. **Clone the repository**
    ```bash
@@ -53,75 +53,114 @@ A graphical Multi-User Dungeon (MUD) game set in a biblical fantasy world, featu
    pip install -r requirements.txt
    ```
 
-4. **Initialize Evennia**
+4. **Run automated setup**
    ```bash
-   cd server
+   ./setup_evennia.sh
+   ```
+
+   This script will:
+   - Initialize Evennia
+   - Copy all custom files
+   - Configure settings
+   - Set up command systems
+
+5. **Complete setup**
+   ```bash
+   cd mygame
    evennia migrate
-   ```
-
-5. **Create superuser account**
-   ```bash
    evennia createsuperuser
-   ```
-
-6. **Start the server**
-   ```bash
    evennia start
    ```
 
+6. **Build the world**
+
+   Connect to `http://localhost:4001` and log in.
+
+   In-game, execute:
+   ```python
+   @py from world import build_world; build_world.build_all()
+   ```
+
+   This creates all 30+ rooms, 50+ items, and 20+ NPCs!
+
 7. **Access the game**
-   - Web Client: Open `web/index.html` in your browser
-   - Or visit: `http://localhost:4001` for Evennia's default web client
-   - Admin Panel: `http://localhost:4001/admin`
+   - **Evennia Web Client**: `http://localhost:4001`
+   - **Custom Graphical Client**: Open `web/index.html` in browser
+   - **Telnet**: `telnet localhost 4000`
+
+See **[docs/EVENNIA_INTEGRATION.md](docs/EVENNIA_INTEGRATION.md)** for detailed setup guide.
 
 ## Project Structure
 
 ```
-biblical-mud/
-├── server/                    # Evennia server (created after init)
-│   ├── world/                 # World building modules
-│   ├── commands/              # Custom game commands
-│   └── typeclasses/          # Game systems and mechanics
+Modern-Mudfare/
+├── server/                          # Backend game server
+│   ├── typeclasses/                 # Custom Evennia typeclasses
+│   │   ├── rooms.py                 # Room types (Safe, Boss, Hidden)
+│   │   ├── objects.py               # Items (Weapon, Consumable, Key)
+│   │   ├── npcs.py                  # NPCs (Priest, Merchant, Boss)
+│   │   └── characters.py            # Player character class
+│   ├── world/                       # World data and builder
+│   │   ├── world_data.py            # All 7 floors, 30+ rooms
+│   │   ├── items.py                 # 50+ item definitions
+│   │   ├── npcs.py                  # 20+ NPC definitions
+│   │   └── build_world.py           # World population script
+│   ├── commands/                    # Custom commands
+│   │   ├── dialogue.py              # Talk, Ask, Read, Examine
+│   │   └── character.py             # Stats, Inventory, Equip, Use
+│   └── README.md                    # Backend integration guide
 │
-├── web/                       # Custom graphical web client
-│   ├── index.html            # Main game page
-│   ├── css/                  # Stylesheets
-│   ├── js/                   # Game client code
-│   │   ├── game.js           # Main game loop
-│   │   ├── renderer.js       # Canvas rendering
-│   │   ├── audio.js          # Sound management
-│   │   ├── websocket.js      # Server communication
-│   │   └── ui.js             # User interface
-│   └── assets/               # Game assets
-│       ├── sprites/          # Character & creature sprites
-│       ├── tiles/            # Environment tiles
-│       └── audio/            # Music and sound effects
+├── web/                             # Custom graphical web client
+│   ├── index.html                   # Main game page
+│   ├── css/
+│   │   ├── style.css                # Core styling
+│   │   └── mobile.css               # Responsive mobile design
+│   └── js/
+│       ├── game.js                  # Main game controller
+│       ├── renderer.js              # HTML5 Canvas rendering
+│       ├── audio.js                 # Sound/music manager
+│       ├── websocket.js             # Server communication
+│       └── ui.js                    # UI management
 │
-├── docs/                      # Documentation
-│   ├── GAME_DESIGN.md        # Game design document
-│   ├── SETUP.md              # Detailed setup guide
-│   └── API.md                # Client-server API reference
+├── docs/                            # Documentation
+│   ├── GAME_DESIGN.md               # Complete game design
+│   ├── WORLD_DESIGN.md              # World structure and lore
+│   ├── SETUP.md                     # Detailed setup guide
+│   ├── EVENNIA_INTEGRATION.md       # Integration walkthrough
+│   └── API.md                       # Client-server API (TODO)
 │
-├── requirements.txt           # Python dependencies
-├── .gitignore                # Git ignore rules
-└── README.md                 # This file
+├── setup_evennia.sh                 # Automated setup script
+├── requirements.txt                 # Python dependencies
+├── .gitignore                       # Git ignore rules
+└── README.md                        # This file
 ```
 
 ## Development Roadmap
 
-### Phase 1: Foundation ✓ (In Progress)
+### Phase 1: Foundation ✓ (COMPLETE)
 - [x] Project structure setup
-- [x] Evennia installation
-- [ ] Basic world creation
-- [ ] Character creation system
-- [ ] Basic movement commands
+- [x] Complete world data structure (7 floors, 30+ rooms)
+- [x] Item database (50+ items)
+- [x] NPC database (20+ NPCs with dialogue)
+- [x] Evennia typeclasses (rooms, items, NPCs, characters)
+- [x] World builder script
+- [x] Command systems (dialogue, character, exploration)
+- [x] HTML5 web client with graphics and sound
 
-### Phase 2: Graphics (Next)
-- [ ] HTML5 Canvas client
-- [ ] Sprite rendering system
-- [ ] Basic tileset
-- [ ] Character animations
-- [ ] Camera/viewport system
+### Phase 2: Integration ✓ (COMPLETE)
+- [x] Automated setup script
+- [x] Complete integration documentation
+- [x] Character class system (Prophet, Warrior, Shepherd, Scribe)
+- [x] Stat system (Faith, Wisdom, Strength, Courage, Righteousness)
+- [x] Inventory and equipment system
+- [x] NPC dialogue trees
+
+### Phase 3: Gameplay (Next)
+- [ ] Combat system implementation
+- [ ] Boss encounter mechanics
+- [ ] Quest tracking and completion
+- [ ] Save/load functionality
+- [ ] Calling system (spiritual paths)
 
 ### Phase 3: Audio
 - [ ] Web Audio API integration
@@ -214,6 +253,6 @@ Built with:
 
 ---
 
-**Status**: Early Development (Phase 1)
+**Status**: Core Complete - Ready for Integration Testing (Phase 2 Complete)
 
 *"For we walk by faith, not by sight." - 2 Corinthians 5:7*
