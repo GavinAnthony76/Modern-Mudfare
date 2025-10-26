@@ -50,3 +50,7 @@ package-lock.json
 # Temporary files
 *.tmp
 *.bak
+
+# Temporary build artifacts
+*.patch
+*.tar.gz
