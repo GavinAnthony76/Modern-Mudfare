@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Journey Through Scripture - A Biblical Fantasy MUD">
+    <title>Journey Through Scripture</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <div class="logo-container">
+                <h1 class="game-title">Journey Through Scripture</h1>
+                <p class="game-subtitle">A Biblical Fantasy Adventure</p>
+            </div>
+
+            <div class="menu-container">
+                <button id="btn-new-game" class="menu-btn primary">New Character</button>
+                <button id="btn-continue" class="menu-btn">Continue Journey</button>
+                <button id="btn-about" class="menu-btn">About</button>
+            </div>
+
+            <div class="intro-text">
+                <p>"In a time when the world was young and miracles walked the earth,</p>
+                <p>you are called to embark on a sacred journey.</p>
+                <p>As a traveler seeking divine wisdom and truth,</p>
+                <p>you must face trials, combat ancient evils,</p>
+                <p>and discover the mysteries hidden in sacred lands..."</p>
+            </div>
+
+            <div class="version-info">v0.1.0-alpha | Built with Evennia</div>
+        </div>
+    </div>
+
+    <!-- Character Creation Screen -->
+    <div id="character-creation" class="screen">
+        <div class="char-creation-container">
+            <h2>Create Your Character</h2>
+
+            <div class="creation-step" id="step-name">
+                <label for="char-name">Choose Your Name</label>
+                <input type="text" id="char-name" placeholder="Enter a biblical name..." maxlength="20">
+                <div class="name-suggestions">
+                    <span class="suggestion">David</span>
+                    <span class="suggestion">Ruth</span>
+                    <span class="suggestion">Elijah</span>
+                    <span class="suggestion">Esther</span>
+                    <span class="suggestion">Joshua</span>
+                    <span class="suggestion">Deborah</span>
+                </div>
+            </div>
+
+            <div class="creation-step" id="step-class">
+                <label>Choose Your Path</label>
+                <div class="class-selection">
+                    <div class="class-card" data-class="prophet">
+                        <h3>Prophet</h3>
+                        <div class="class-icon">&#128214;</div>
+                        <p>High wisdom and faith, divine insight</p>
+                        <div class="class-stats">
+                            <span>Faith: &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            <span>Wisdom: &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            <span>Strength: &#9733;&#9733;&#9734;&#9734;&#9734;</span>
+                        </div>
+                    </div>
+                    <div class="class-card" data-class="warrior">
+                        <h3>Warrior</h3>
+                        <div class="class-icon">&#9876;</div>
+                        <p>Strong in combat, righteous defender</p>
+                        <div class="class-stats">
+                            <span>Strength: &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            <span>Courage: &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            <span>Wisdom: &#9733;&#9733;&#9733;&#9734;&#9734;</span>
+                        </div>
+                    </div>
+                    <div class="class-card" data-class="shepherd">
+                        <h3>Shepherd</h3>
+                        <div class="class-icon">&#128007;</div>
+                        <p>Balanced stats, natural leader</p>
+                        <div class="class-stats">
+                            <span>All Stats: &#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                            <span>Balanced and versatile</span>
+                        </div>
+                    </div>
+                    <div class="class-card" data-class="scribe">
+                        <h3>Scribe</h3>
+                        <div class="class-icon">&#128221;</div>
+                        <p>Knowledge-focused, strategic thinker</p>
+                        <div class="class-stats">
+                            <span>Wisdom: &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            <span>Intelligence: &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            <span>Strength: &#9733;&#9733;&#9734;&#9734;&#9734;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creation-buttons">
+                <button id="btn-back-to-menu" class="btn-secondary">Back to Menu</button>
+                <button id="btn-create-character" class="btn-primary">Begin Journey</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Game Canvas -->
+        <div id="game-container">
+            <canvas id="game-canvas"></canvas>
+
+            <!-- Game UI Overlay -->
+            <div id="game-ui">
+                <!-- Top Bar - Character Stats -->
+                <div id="top-bar">
+                    <div class="stat-group">
+                        <div class="stat">
+                            <span class="stat-label">Health</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill health-fill" style="width: 100%"></div>
+                                <span class="stat-value">100/100</span>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Faith</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill faith-fill" style="width: 100%"></div>
+                                <span class="stat-value">100/100</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="character-info">
+                        <span id="char-name-display">Traveler</span>
+                        <span id="char-level">Level 1</span>
+                    </div>
+
+                    <div class="game-controls">
+                        <button id="btn-inventory" class="icon-btn" title="Inventory">&#127890;</button>
+                        <button id="btn-quests" class="icon-btn" title="Quests">&#128220;</button>
+                        <button id="btn-map" class="icon-btn" title="Map">&#128506;</button>
+                        <button id="btn-settings" class="icon-btn" title="Settings">&#9881;</button>
+                    </div>
+                </div>
+
+                <!-- Text Output Area -->
+                <div id="text-output">
+                    <div id="text-content">
+                        <p class="system-message">Welcome to Journey Through Scripture!</p>
+                        <p class="narrative">You stand at the edge of the Desert Wilderness, ancient sands stretching before you...</p>
+                    </div>
+                </div>
+
+                <!-- Command Input -->
+                <div id="command-input-area">
+                    <input type="text" id="command-input" placeholder="Enter command..." autocomplete="off">
+                    <button id="btn-send-command" class="btn-primary">Send</button>
+                </div>
+
+                <!-- Mobile Touch Controls -->
+                <div id="mobile-controls" class="mobile-only">
+                    <div class="dpad">
+                        <button class="dpad-btn dpad-up" data-direction="north">&#9650;</button>
+                        <button class="dpad-btn dpad-left" data-direction="west">&#9664;</button>
+                        <button class="dpad-btn dpad-center" data-action="look">&#128065;</button>
+                        <button class="dpad-btn dpad-right" data-direction="east">&#9654;</button>
+                        <button class="dpad-btn dpad-down" data-direction="south">&#9660;</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" data-action="inventory">Bag</button>
+                        <button class="action-btn" data-action="attack">Attack</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Panels (Desktop) -->
+        <div id="side-panel" class="desktop-only">
+            <div class="panel-tabs">
+                <button class="panel-tab active" data-panel="inventory">Inventory</button>
+                <button class="panel-tab" data-panel="quests">Quests</button>
+                <button class="panel-tab" data-panel="map">Map</button>
+            </div>
+
+            <div class="panel-content">
+                <div id="panel-inventory" class="panel active">
+                    <h3>Inventory</h3>
+                    <div class="inventory-grid">
+                        <div class="inventory-slot empty"></div>
+                        <div class="inventory-slot empty"></div>
+                        <div class="inventory-slot empty"></div>
+                        <div class="inventory-slot empty"></div>
+                        <div class="inventory-slot empty"></div>
+                        <div class="inventory-slot empty"></div>
+                    </div>
+                </div>
+
+                <div id="panel-quests" class="panel">
+                    <h3>Active Quests</h3>
+                    <div class="quest-list">
+                        <p class="empty-message">No active quests</p>
+                    </div>
+                </div>
+
+                <div id="panel-map" class="panel">
+                    <h3>Map</h3>
+                    <div class="mini-map">
+                        <canvas id="mini-map-canvas" width="200" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Screen -->
+    <div id="about-screen" class="screen">
+        <div class="about-container">
+            <h2>About Journey Through Scripture</h2>
+            <div class="about-content">
+                <p>Journey Through Scripture is a graphical MUD (Multi-User Dungeon) set in a biblical fantasy world.</p>
+
+                <h3>Features</h3>
+                <ul>
+                    <li>Explore lands inspired by biblical scripture</li>
+                    <li>Battle mythical creatures from ancient lore</li>
+                    <li>Receive guidance from divine messengers</li>
+                    <li>Progress through a rich character development system</li>
+                    <li>Experience immersive graphics and sound</li>
+                </ul>
+
+                <h3>Technology</h3>
+                <p>Built with Evennia MUD framework, HTML5 Canvas, and Web Audio API</p>
+
+                <h3>Credits</h3>
+                <p>Created as a learning project combining classic MUD gameplay with modern web technologies</p>
+                <p class="scripture-quote">"For we walk by faith, not by sight." - 2 Corinthians 5:7</p>
+            </div>
+            <button id="btn-back-from-about" class="btn-primary">Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">Loading...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

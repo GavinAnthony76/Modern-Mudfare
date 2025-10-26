@@ -1,0 +1,10 @@
+# Biblical Fantasy MUD - Python Dependencies
+
+# Evennia MUD Framework
+evennia>=4.0.0
+
+# Database
+django>=4.2.0
+twisted>=23.0.0
+
+# Additional dependencies will be added as needed
