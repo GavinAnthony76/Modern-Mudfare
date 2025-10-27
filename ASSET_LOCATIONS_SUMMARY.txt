@@ -1,0 +1,390 @@
+================================================================================
+ASSET LOCATIONS SUMMARY - Biblical Fantasy MUD
+================================================================================
+
+MAIN ASSET DIRECTORY:
+  mygame/web/static/webclient/assets/
+
+================================================================================
+QUICK REFERENCE TABLE
+================================================================================
+
+ASSET TYPE              | DIRECTORY                          | FORMAT    | SIZE
+------------------------|------------------------------------|-----------|-----------
+SPRITES/CHARACTERS      | assets/sprites/                    | PNG       | 32x32
+SPRITES/ENEMIES         | assets/sprites/                    | PNG       | 40-48x40-48
+TILES/FLOORS            | assets/tiles/                      | PNG       | 32x32
+TILES/WALLS             | assets/tiles/                      | PNG       | 32x32
+BACKGROUND MUSIC        | assets/audio/music/                | MP3/OGG   | 2-5 min
+SOUND EFFECTS           | assets/audio/sfx/                  | WAV/MP3   | 0.5-3 sec
+CUSTOM FONTS            | assets/fonts/                      | TTF/WOFF2 | <200KB
+PARTICLE EFFECTS        | assets/particles/                  | PNG       | 8x32
+
+================================================================================
+FULL DIRECTORY STRUCTURE
+================================================================================
+
+mygame/web/static/webclient/assets/
+│
+├── README.md                          ← Start here for full overview
+│
+├── sprites/                           ← Character & NPC sprite images
+│   ├── README.md                      ← Sprite specifications
+│   ├── player_idle.png                (32x32 PNG, transparent)
+│   ├── player_walk.png                (128x32 PNG - 4 frames)
+│   ├── npc_elder.png
+│   ├── npc_priest.png
+│   ├── npc_merchant.png
+│   ├── enemy_demon.png
+│   └── enemy_deceiver.png
+│
+├── tiles/                             ← Environment tile graphics
+│   ├── README.md                      ← Tile specifications
+│   ├── floor_stone.png                (32x32 PNG, seamless)
+│   ├── floor_grass.png
+│   ├── floor_sand.png
+│   ├── wall_stone.png
+│   ├── wall_brick.png
+│   ├── door_open.png
+│   └── door_closed.png
+│
+├── audio/                             ← All sound files
+│   ├── README.md                      ← Audio specifications
+│   │
+│   ├── music/                         ← Background music tracks
+│   │   ├── README.md
+│   │   ├── exploration_peaceful.mp3   (44.1 kHz, 192 kbps, stereo)
+│   │   ├── exploration_peaceful.ogg   (fallback)
+│   │   ├── combat_intense.mp3
+│   │   ├── sacred_temple.mp3
+│   │   ├── boss_battle.mp3
+│   │   ├── ambient.mp3
+│   │   ├── puzzle_thinking.mp3
+│   │   ├── victory_fanfare.mp3
+│   │   └── defeat_theme.mp3
+│   │
+│   └── sfx/                           ← Sound effects
+│       ├── README.md
+│       ├── sword_slash.wav            (44.1 kHz, 16-bit, mono)
+│       ├── magic_cast.wav
+│       ├── hit_impact.wav
+│       ├── footstep_stone.wav
+│       ├── footstep_grass.wav
+│       ├── button_click.wav
+│       ├── ui_select.wav
+│       ├── npc_talk.wav
+│       ├── divine_light.wav
+│       ├── healing.wav
+│       ├── level_up.wav
+│       └── [more SFX files...]
+│
+├── fonts/                             ← Custom fonts for UI & text
+│   ├── README.md                      ← Font specifications
+│   ├── biblical_serif.ttf             (for story/lore text)
+│   ├── ui_sans.ttf                    (for UI elements)
+│   └── monospace_code.ttf             (for status displays)
+│
+└── particles/                         ← Particle effect images
+    ├── README.md                      ← Particle specifications
+    ├── spark_yellow.png               (8x8-32x32 PNG, transparent)
+    ├── spark_blue.png
+    ├── spark_red.png
+    ├── healing_light.png
+    ├── damage_red.png
+    └── curse_dark.png
+
+================================================================================
+DOCUMENTATION FILES
+================================================================================
+
+In Repository Root:
+  ├── ASSETS_GUIDE.md              ← Complete asset guide (READ THIS FIRST!)
+  ├── ASSET_QUICK_START.md         ← Quick reference & step-by-step
+  └── ASSET_LOCATIONS_SUMMARY.txt  ← This file
+
+In assets/ subdirectories:
+  ├── assets/README.md
+  ├── assets/sprites/README.md
+  ├── assets/tiles/README.md
+  ├── assets/audio/README.md
+  ├── assets/audio/music/README.md
+  ├── assets/audio/sfx/README.md
+  ├── assets/fonts/README.md
+  └── assets/particles/README.md
+
+================================================================================
+HOW TO ADD ASSETS
+================================================================================
+
+STEP 1: Choose Asset Type
+  └─ Sprites?  → Go to: assets/sprites/
+  └─ Tiles?    → Go to: assets/tiles/
+  └─ Music?    → Go to: assets/audio/music/
+  └─ SFX?      → Go to: assets/audio/sfx/
+  └─ Fonts?    → Go to: assets/fonts/
+  └─ Particles?→ Go to: assets/particles/
+
+STEP 2: Follow Specifications
+  └─ Check the README.md in that subdirectory
+  └─ Match file format, size, quality requirements
+  └─ Name files clearly and consistently
+
+STEP 3: Place File in Directory
+  └─ Copy/paste or drag file into folder
+  └─ Keep folder organized by type
+
+STEP 4: Reference in Code
+  └─ Update game.js, renderer.js, or index.html
+  └─ Use path: /static/webclient/assets/[type]/filename
+
+STEP 5: Test
+  └─ Open game in browser (F12 for console)
+  └─ Check for loading errors
+  └─ Verify audio/graphics appear correctly
+
+================================================================================
+QUICK FILE SPECIFICATIONS
+================================================================================
+
+SPRITES:
+  Format:     PNG (RGBA - with transparency)
+  Size:       32x32 px (standard), 64x64 px (large), 48x48 px (bosses)
+  Colors:     32-bit RGBA
+  Compression:Lossless (PNG)
+  Max Size:   50 KB per file
+
+TILES:
+  Format:     PNG (RGBA - with transparency)
+  Size:       32x32 px (must be consistent for tiling)
+  Colors:     32-bit RGBA
+  Compression:Lossless (PNG)
+  Max Size:   40 KB per file
+  Note:       Must seamlessly tile with adjacent tiles
+
+MUSIC:
+  Format:     MP3 (primary) + OGG (fallback)
+  Sample Rate:44.1 kHz or 48 kHz
+  Bitrate:    192-256 kbps (MP3), 128 kbps (OGG)
+  Channels:   Stereo
+  Length:     2-5 minutes (seamless loop)
+  Peak Vol:   -3dB to -6dB
+  Max Size:   2-3 MB per track
+
+SOUND EFFECTS:
+  Format:     WAV (lossless) or MP3
+  Sample Rate:44.1 kHz
+  Bitrate:    16-bit PCM (WAV) or 128 kbps (MP3)
+  Channels:   Mono (preferred)
+  Length:     0.5 - 3 seconds
+  Peak Vol:   -3dB to -6dB
+  Max Size:   100-200 KB per file
+
+FONTS:
+  Format:     TTF, WOFF2 (preferred), OTF
+  Size:       Keep under 200 KB per font
+  Character Set: At least Latin-1 supplement
+
+PARTICLES:
+  Format:     PNG (RGBA - with transparency)
+  Size:       8x8 to 32x32 pixels
+  Colors:     32-bit RGBA
+  Compression:Lossless (PNG)
+
+================================================================================
+ASSET MANAGEMENT TIPS
+================================================================================
+
+NAMING CONVENTIONS:
+  ✓ Use lowercase with underscores: player_idle.png
+  ✓ Be descriptive: npc_priest_talking.png (not sprite1.png)
+  ✓ Include type: floor_stone.png, wall_brick.png
+  ✓ Version if needed: background_v1.png, background_v2.png
+
+ORGANIZATION:
+  ✓ Group by type (sprites, tiles, audio) not by location
+  ✓ Use subdirectories for large collections
+  ✓ Keep consistent file structure across project
+
+FILE SIZES:
+  ✓ Sprites: 20-50 KB each
+  ✓ Tiles: 15-40 KB each
+  ✓ Music: 1-2 MB per track (compress!)
+  ✓ SFX: 10-100 KB each
+  ✓ TOTAL: Keep under 50 MB for fast loading
+
+COMPRESSION:
+  ✓ Use TinyPNG.com or ImageOptim for images
+  ✓ Use Audacity to normalize and compress audio
+  ✓ Reduce colors in sprites if possible
+  ✓ Use lower bitrate for UI sounds (64-128 kbps)
+
+ATTRIBUTION:
+  ✓ Create ASSETS_CREDITS.md for sources
+  ✓ List artist, source, and license for each asset
+  ✓ Include URLs to original sources
+  ✓ Respect copyright and licenses
+
+================================================================================
+TOOLS & RESOURCES
+================================================================================
+
+IMAGE CREATION & EDITING:
+  - Aseprite ($20)          → Professional pixel art
+  - Piskel (free, online)   → Simple sprite editor
+  - Krita (free)            → Digital painting
+  - LibreSprite (free)      → Free Aseprite fork
+
+AUDIO EDITING & COMPOSITION:
+  - Audacity (free)         → Multi-track audio editor
+  - Adobe Audition ($20/mo) → Professional audio
+  - Reaper ($60)            → Music DAW
+
+ASSET OPTIMIZATION:
+  - TinyPNG.com (online)    → Image compression
+  - ImageOptim (Mac)        → Batch image optimization
+  - FileSize.com (online)   → Audio/video compression
+  - PNGQuant                → Color reduction
+
+FREE ASSET LIBRARIES:
+  - Incompetech             → Music (Kevin MacLeod)
+  - Freesound.org           → Sound effects
+  - OpenGameArt.org         → Game art & audio
+  - itch.io                 → Asset packs
+  - Google Fonts            → Free fonts
+
+================================================================================
+CODE USAGE EXAMPLES
+================================================================================
+
+LOADING SPRITES IN renderer.js:
+  renderer.loadSprite('player_idle', {
+    type: 'image',
+    path: '/static/webclient/assets/sprites/player_idle.png',
+    width: 32,
+    height: 32
+  });
+
+PLAYING MUSIC IN game.js:
+  audioManager.playMusic('exploration_peaceful');
+  audioManager.playStateMusic('combat');  // Plays combat_intense
+
+PLAYING SOUND EFFECTS IN game.js:
+  audioManager.playSFX('sword_slash');
+  audioManager.playMultipleSFX(['sword_slash', 'hit_impact']);
+
+USING FONTS IN CSS:
+  @font-face {
+    font-family: 'Biblical';
+    src: url('/static/webclient/assets/fonts/biblical_serif.ttf');
+  }
+  .story-text { font-family: 'Biblical', serif; }
+
+ADDING PARTICLES:
+  renderer.addParticle(x, y, '#FFD700', 1000);  // Yellow, 1 sec
+  renderer.addParticle(x, y, '#FF0000');         // Red (damage)
+  renderer.addParticle(x, y, '#00FF00');         // Green (healing)
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+IMAGES NOT LOADING:
+  → Check file path is correct
+  → Verify PNG has transparency (RGBA, not RGB)
+  → Check browser console for CORS errors
+  → Ensure filename matches exactly (case-sensitive)
+
+AUDIO NOT PLAYING:
+  → Check format is supported (MP3, OGG, WAV)
+  → Check volume levels (should be -3dB to -6dB peak)
+  → Test in multiple browsers
+  → Check browser console for errors
+
+PERFORMANCE ISSUES:
+  → Reduce sprite/tile file sizes (< 50 KB each)
+  → Compress music (MP3 192 kbps or lower)
+  → Limit concurrent sounds (max 8-16)
+  → Check total asset size (< 50 MB)
+
+FILES NOT FOUND:
+  → Verify exact path: /static/webclient/assets/[type]/filename
+  → Check spelling and case
+  → Use lowercase filenames with underscores
+  → Ensure file exists in correct directory
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. READ documentation:
+   └─ Start with ASSETS_GUIDE.md (comprehensive)
+   └─ or ASSET_QUICK_START.md (quick reference)
+
+2. GATHER assets:
+   └─ Create or download assets from resources above
+   └─ Ensure they match specifications
+
+3. ORGANIZE files:
+   └─ Place in correct subdirectory
+   └─ Name consistently
+
+4. UPDATE code:
+   └─ Reference assets in game.js or renderer.js
+   └─ Test in browser (F12 console)
+
+5. DOCUMENT sources:
+   └─ Create ASSETS_CREDITS.md
+   └─ List all sources and licenses
+
+6. COMMIT & PUSH:
+   └─ git add assets/
+   └─ git commit -m "Add game assets"
+   └─ git push
+
+================================================================================
+FREQUENTLY ASKED QUESTIONS
+================================================================================
+
+Q: Can I use assets from the internet?
+A: Yes! Many sites have royalty-free assets. Always check the license.
+
+Q: How do I make sprites transparent?
+A: Use PNG format with alpha channel. Tools like Krita or Photoshop can do this.
+
+Q: Can I use MP3 or only OGG for music?
+A: MP3 is primary, OGG is fallback. Both are recommended for compatibility.
+
+Q: How do I loop music seamlessly?
+A: Use audio editor to trim silence, ensure start and end frequencies match.
+
+Q: What if my assets are too large?
+A: Compress with TinyPNG (images) or lower bitrate (audio). Keep under 50 MB total.
+
+Q: Can I update assets after uploading?
+A: Yes! Just replace the file and refresh browser. May need to clear cache.
+
+Q: How do I credit my assets?
+A: Create ASSETS_CREDITS.md file with artist, source, and license for each.
+
+Q: Can I use game assets from other games?
+A: Not without permission. Use free/royalty-free assets instead.
+
+================================================================================
+SUPPORT & DOCUMENTATION
+================================================================================
+
+For more information:
+  1. Read ASSETS_GUIDE.md (full specifications)
+  2. Check individual README files in each asset directory
+  3. Review ASSET_QUICK_START.md (step-by-step guides)
+  4. Check code comments in game.js and renderer.js
+  5. Visit GitHub repository for updates
+
+Questions or issues?
+  → Check ASSETS_GUIDE.md troubleshooting section
+  → Review README files in asset directories
+  → Check browser console (F12) for error messages
+
+================================================================================
+End of Summary
+================================================================================
