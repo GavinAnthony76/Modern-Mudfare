@@ -361,26 +361,74 @@ class GameRenderer {
    * Render sprite to canvas
    */
   renderSprite(sprite, x, y) {
-    if (!sprite || !sprite.image) return;
+    if (!sprite) return;
 
-    try {
-      // For SVG-based placeholder sprites (created via data URI)
-      if (sprite.type === 'placeholder') {
-        // SVG images might not have complete property, so check if it has source
-        if (sprite.image.src) {
-          this.ctx.drawImage(sprite.image, x, y, sprite.width || 32, sprite.height || 32);
-        }
-      } else if (sprite.image.complete) {
-        // For regular PNG/JPG images
-        this.ctx.drawImage(sprite.image, x, y, sprite.width || 32, sprite.height || 32);
+    const width = sprite.width || 32;
+    const height = sprite.height || 32;
+
+    // For placeholder sprites, draw as colored geometric shapes
+    if (sprite.type === 'placeholder') {
+      this.drawPlaceholderSprite(sprite, x, y, width, height);
+      return;
+    }
+
+    // For regular images, try to draw the image
+    if (sprite.image && sprite.image.complete) {
+      try {
+        this.ctx.drawImage(sprite.image, x, y, width, height);
+        return;
+      } catch (e) {
+        console.log('Error drawing image:', e);
       }
-    } catch (e) {
-      // If image fails to load, draw a fallback rectangle
-      this.ctx.fillStyle = sprite.color || '#999';
-      this.ctx.fillRect(x, y, sprite.width || 32, sprite.height || 32);
-      this.ctx.strokeStyle = '#333';
-      this.ctx.lineWidth = 1;
-      this.ctx.strokeRect(x, y, sprite.width || 32, sprite.height || 32);
+    }
+
+    // Fallback: draw as colored rectangle
+    this.ctx.fillStyle = sprite.color || '#999';
+    this.ctx.fillRect(x, y, width, height);
+    this.ctx.strokeStyle = '#666';
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeRect(x, y, width, height);
+  }
+
+  /**
+   * Draw placeholder sprite as geometric shape
+   */
+  drawPlaceholderSprite(sprite, x, y, width, height) {
+    const color = sprite.color || '#999';
+    const shape = sprite.shape || 'rect';
+
+    this.ctx.fillStyle = color;
+    this.ctx.strokeStyle = '#333';
+    this.ctx.lineWidth = 2;
+
+    if (shape === 'rect') {
+      this.ctx.fillRect(x, y, width, height);
+      this.ctx.strokeRect(x, y, width, height);
+    } else if (shape === 'circle') {
+      this.ctx.beginPath();
+      this.ctx.arc(x + width / 2, y + height / 2, Math.max(width, height) / 2 - 1, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.stroke();
+    } else if (shape === 'character') {
+      // Draw simple character: head, body, legs
+      const scale = width / 32;
+
+      // Head
+      this.ctx.fillStyle = color;
+      this.ctx.beginPath();
+      this.ctx.arc(x + width / 2, y + 8 * scale, 4 * scale, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.stroke();
+
+      // Body
+      this.ctx.fillRect(x + 8 * scale, y + 12 * scale, 16 * scale, 10 * scale);
+      this.ctx.strokeRect(x + 8 * scale, y + 12 * scale, 16 * scale, 10 * scale);
+
+      // Legs
+      this.ctx.fillRect(x + 10 * scale, y + 22 * scale, 4 * scale, 8 * scale);
+      this.ctx.strokeRect(x + 10 * scale, y + 22 * scale, 4 * scale, 8 * scale);
+      this.ctx.fillRect(x + 18 * scale, y + 22 * scale, 4 * scale, 8 * scale);
+      this.ctx.strokeRect(x + 18 * scale, y + 22 * scale, 4 * scale, 8 * scale);
     }
   }
 

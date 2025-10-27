@@ -657,8 +657,8 @@ class BiblicalMUDGame {
     items.forEach(item => this.gameObjects.push(item));
 
     // Update player position in game state
-    this.gameState.health = player.health;
-    this.gameState.maxHealth = player.maxHealth;
+    this.gameState.health = playerObj.health;
+    this.gameState.maxHealth = playerObj.maxHealth;
   }
 
   /**
