@@ -1,13 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -m py_compile:*)",
-      "Read(//c/Users/gavin/source/repos/APPS/Modern-Mudfare/**)",
-      "Bash(git rev-parse:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push)",
-      "Bash(dir:*)"
+      "Bash(node:*)",
+      "Bash(node -c:*)",
+      "Bash(for file in web/static/webclient/js/{quests,dialogue,inventory,game}.js)",
+      "Bash(do node -c \"$file\")",
+      "Bash(echo:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

@@ -7,12 +7,20 @@ class BiblicalMUDGame {
   constructor() {
     this.renderer = null;
     this.websocket = null;
+    this.player = null; // Character instance
+    this.questSystem = null;
+    this.dialogueSystem = null;
+    this.combatSystem = null;
     this.gameState = {
       playerName: 'Pilgrim',
       location: 'Floor 1: Outer Court',
       status: 'Exploring',
       health: 100,
       maxHealth: 100,
+      mana: 100,
+      maxMana: 100,
+      xp: 0,
+      level: 1,
       inventory: []
     };
 
@@ -42,6 +50,9 @@ class BiblicalMUDGame {
     // Initialize audio
     this.audioManager = new AudioManager();
 
+    // Initialize game systems
+    this.initializeGameSystems();
+
     // Set up input handling
     this.setupInputHandling();
 
@@ -58,6 +69,31 @@ class BiblicalMUDGame {
     this.startGameLoop();
 
     console.log('Game initialized successfully!');
+  }
+
+  /**
+   * Initialize game systems (character, quest, dialogue, combat)
+   */
+  initializeGameSystems() {
+    console.log('Initializing game systems...');
+
+    // Create player character
+    this.player = new Character('Pilgrim', 'prophet');
+    this.gameState.playerName = this.player.name;
+    this.gameState.health = this.player.health;
+    this.gameState.maxHealth = this.player.maxHealth;
+    this.gameState.mana = this.player.mana;
+    this.gameState.maxMana = this.player.maxMana;
+    this.gameState.level = this.player.level;
+
+    // Create quest system
+    this.questSystem = new QuestSystem();
+
+    // Create dialogue system
+    this.dialogueSystem = new DialogueSystem(this.questSystem);
+
+    console.log(`Player created: ${this.player.name} (${this.player.classType})`);
+    console.log(`Stats: Faith=${this.player.faith}, Wisdom=${this.player.wisdom}, Strength=${this.player.strength}`);
   }
 
   /**
@@ -138,6 +174,33 @@ class BiblicalMUDGame {
     const player = this.gameObjects.find(obj => obj.type === 'player');
     if (!player) return;
 
+    // Handle combat actions
+    if (this.combatSystem && this.combatSystem.combatActive) {
+      if (keys.has('a') || keys.has('A')) {
+        this.playerAttackInCombat();
+        keys.delete('a');
+        keys.delete('A');
+      }
+      if (keys.has('h') || keys.has('H')) {
+        this.playerCastSpellInCombat('heal');
+        keys.delete('h');
+        keys.delete('H');
+      }
+      if (keys.has('s') || keys.has('S')) {
+        this.playerCastSpellInCombat('smite');
+        keys.delete('s');
+        keys.delete('S');
+      }
+      // Enemy turn after player action
+      if (this.combatSystem && this.combatSystem.combatActive && this.combatSystem.currentTurn === 'enemy') {
+        setTimeout(() => {
+          this.enemyAttackInCombat();
+        }, 500);
+      }
+      return;
+    }
+
+    // Normal movement handling
     const moveSpeed = 5;
     const oldX = player.x;
     const oldY = player.y;
@@ -199,10 +262,39 @@ class BiblicalMUDGame {
     this.gameState.status = `Talking to ${npc.label}`;
     console.log(`Interacting with: ${npc.label}`);
 
-    // Show dialogue in UI
-    const messageEl = document.getElementById('gameMessage');
-    if (messageEl) {
-      messageEl.textContent = `${npc.label}: ${npc.dialogue || 'Welcome, traveler!'}`;
+    // Create NPC data structure for dialogue system
+    const npcData = {
+      label: npc.label,
+      dialogue: {
+        greeting: npc.dialogue || 'Welcome, traveler!',
+        main_menu: {
+          1: { text: 'Tell me about yourself', response: 'farewell' },
+          2: { text: 'Goodbye', response: 'farewell' }
+        },
+        responses: {
+          farewell: 'Farewell, traveler. May your path be blessed.'
+        }
+      }
+    };
+
+    // Start dialogue with dialogue system
+    if (this.dialogueSystem) {
+      const dialogueResponse = this.dialogueSystem.startDialogue(npcData);
+      console.log('Dialogue options:', dialogueResponse.options);
+
+      // Show dialogue in UI
+      const messageEl = document.getElementById('gameMessage');
+      if (messageEl) {
+        messageEl.innerHTML = `
+          <div style="font-weight: bold;">${dialogueResponse.npc}</div>
+          <div>${dialogueResponse.text}</div>
+          ${dialogueResponse.options.map(opt =>
+            `<div style="margin-top: 5px; cursor: pointer; color: #0066cc;">
+              ${opt.number}. ${opt.text}
+            </div>`
+          ).join('')}
+        `;
+      }
     }
 
     // Send to server if connected
@@ -317,6 +409,141 @@ class BiblicalMUDGame {
   }
 
   /**
+   * Start combat with an enemy
+   */
+  startCombat(enemy) {
+    if (!this.player || this.combatSystem) {
+      console.log('Combat already in progress or player not ready');
+      return;
+    }
+
+    // Create enemy character object
+    const enemyChar = {
+      name: enemy.label || 'Enemy',
+      health: enemy.health || 30,
+      maxHealth: enemy.health || 30,
+      mana: 0,
+      stats: {
+        faith: 10,
+        wisdom: 8,
+        strength: 12,
+        courage: 10,
+        righteousness: 9
+      },
+      getStat: function(stat) { return this.stats[stat] || 10; },
+      takeDamage: function(damage) {
+        this.health = Math.max(0, this.health - damage);
+        return damage;
+      },
+      calculateDamage: function(bonus = 0) {
+        return this.stats.strength * 2 + bonus + Math.floor(Math.random() * 5);
+      },
+      calculateDefense: function() {
+        return Math.floor(this.stats.faith / 2);
+      },
+      isAlive: function() { return this.health > 0; }
+    };
+
+    // Initialize combat system
+    this.combatSystem = new Combat(this.player, enemyChar);
+    this.gameState.status = `In Combat with ${enemy.label}!`;
+    console.log(`Combat started with ${enemy.label}!`);
+
+    // Show combat status
+    this.showCombatStatus();
+  }
+
+  /**
+   * Player attacks in combat
+   */
+  playerAttackInCombat() {
+    if (!this.combatSystem) return;
+
+    this.combatSystem.playerAttack();
+    this.showCombatStatus();
+
+    if (!this.combatSystem.combatActive) {
+      this.endCombat();
+    }
+  }
+
+  /**
+   * Player casts spell in combat
+   */
+  playerCastSpellInCombat(spellName) {
+    if (!this.combatSystem) return;
+
+    this.combatSystem.playerCastSpell(spellName);
+    this.showCombatStatus();
+
+    if (!this.combatSystem.combatActive) {
+      this.endCombat();
+    }
+  }
+
+  /**
+   * Enemy attacks
+   */
+  enemyAttackInCombat() {
+    if (!this.combatSystem) return;
+
+    this.combatSystem.enemyAttack();
+    this.showCombatStatus();
+
+    if (!this.combatSystem.combatActive) {
+      this.endCombat();
+    }
+  }
+
+  /**
+   * Show combat status in UI
+   */
+  showCombatStatus() {
+    if (!this.combatSystem) return;
+
+    const status = this.combatSystem.getStatus();
+    const messageEl = document.getElementById('gameMessage');
+
+    if (messageEl) {
+      messageEl.innerHTML = `
+        <div style="color: #8B0000; font-weight: bold;">COMBAT</div>
+        <div style="margin-top: 5px;">
+          <div>${this.player.name} HP: ${status.playerHealth}/${status.playerMaxHealth}</div>
+          <div>${status.enemyLabel} HP: ${status.enemyHealth}/${status.enemyMaxHealth}</div>
+          <div style="margin-top: 10px; color: #0066cc;">${status.log[status.log.length - 1] || 'Combat started!'}</div>
+          ${status.combatActive ? `
+            <div style="margin-top: 10px;">
+              <div style="cursor: pointer; color: green;">A - Attack</div>
+              <div style="cursor: pointer; color: blue;">H - Heal Spell (cost: 20 mana)</div>
+              <div style="cursor: pointer; color: orange;">S - Smite Spell (cost: 25 mana)</div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Sync player stats back
+    if (this.player) {
+      this.player.health = status.playerHealth;
+      this.player.mana = status.playerMana;
+    }
+  }
+
+  /**
+   * End combat
+   */
+  endCombat() {
+    if (!this.combatSystem) return;
+
+    const status = this.combatSystem.getStatus();
+    console.log('Combat ended!');
+    console.log(status.log[status.log.length - 1]);
+
+    this.combatSystem = null;
+    this.gameState.status = 'Exploring';
+  }
+
+  /**
    * Show notification message
    */
   showNotification(message) {
@@ -352,19 +579,22 @@ class BiblicalMUDGame {
    * Create demo world with NPCs and objects
    */
   createDemoWorld() {
-    // Create player
-    const player = {
+    // Create player game object from character instance
+    const playerObj = {
       id: 'player',
       type: 'player',
       x: 400,
       y: 300,
       sprite: 'player',
-      label: 'You',
-      health: 100,
-      maxHealth: 100,
+      label: this.player.name,
+      health: this.player.health,
+      maxHealth: this.player.maxHealth,
+      mana: this.player.mana,
+      maxMana: this.player.maxMana,
+      level: this.player.level,
       visible: true
     };
-    this.gameObjects.push(player);
+    this.gameObjects.push(playerObj);
 
     // Create NPCs
     const npcs = [
@@ -466,6 +696,24 @@ class BiblicalMUDGame {
    * Update game state each frame
    */
   update() {
+    // Sync player character stats to game state
+    if (this.player) {
+      this.gameState.health = this.player.health;
+      this.gameState.maxHealth = this.player.maxHealth;
+      this.gameState.mana = this.player.mana;
+      this.gameState.maxMana = this.player.maxMana;
+      this.gameState.level = this.player.level;
+      this.gameState.xp = this.player.xp;
+
+      // Update player object in game world
+      const playerObj = this.gameObjects.find(obj => obj.id === 'player');
+      if (playerObj) {
+        playerObj.health = this.player.health;
+        playerObj.mana = this.player.mana;
+        playerObj.level = this.player.level;
+      }
+    }
+
     // Update game logic here
     // This is called every frame
   }
