@@ -91,7 +91,7 @@ class AudioManager {
    * Play background music
    */
   playMusic(musicKey, loop = true) {
-    const bgAudioUrl = `/static/audio/music/${musicKey}.mp3`;
+    const bgAudioUrl = `assets/audio/music/${musicKey}.mp3`;
 
     // For demo, create a simple generated music or use silence
     if (!this.bgMusic.src) {
@@ -120,7 +120,7 @@ class AudioManager {
    */
   playSFX(soundKey) {
     // Try to load actual audio file first (for real assets like footstep_wood)
-    const audioPath = `/static/webclient/assets/audio/sfx/${soundKey}.mp3`;
+    const audioPath = `assets/audio/sfx/${soundKey}.mp3`;
     const audio = new Audio();
     audio.src = audioPath;
     audio.volume = this.sfxVolume * this.masterVolume;
