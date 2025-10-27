@@ -29,6 +29,7 @@ class BiblicalMUDGame {
     this.frameCount = 0;
     this.lastFrameTime = Date.now();
     this.fps = 0;
+    this.lastFootstepDistance = 0;
 
     this.inputManager = new InputManager();
     this.audioManager = null;
@@ -229,9 +230,12 @@ class BiblicalMUDGame {
       this.renderer.updateCamera(player.x + 16, player.y + 16);
       this.checkCollisions(player);
 
-      // Play footstep sound on movement
-      if (this.audioManager && Math.random() > 0.7) {
+      // Play footstep sound every 40 pixels of movement
+      const distanceMoved = Math.abs((player.x - oldX) + (player.y - oldY));
+      this.lastFootstepDistance += distanceMoved;
+      if (this.audioManager && this.lastFootstepDistance >= 40) {
         this.audioManager.playSFX('footstep_wood');
+        this.lastFootstepDistance = 0;
       }
     }
   }
