@@ -301,6 +301,16 @@ class GameRenderer {
 
     // Draw game objects
     this.gameObjects.sort((a, b) => (a.y || 0) - (b.y || 0)); // Sort by Y for proper depth
+
+    // Debug: Log object count on first render
+    if (!this.debugLogged) {
+      console.log(`Rendering ${this.gameObjects.length} game objects`);
+      this.gameObjects.forEach(obj => {
+        console.log(`  - ${obj.label || obj.id}: ${obj.type} at (${obj.x}, ${obj.y}), sprite: ${obj.sprite}, visible: ${obj.visible}`);
+      });
+      this.debugLogged = true;
+    }
+
     this.gameObjects.forEach(obj => this.renderObject(obj));
 
     // Draw particles
@@ -351,8 +361,26 @@ class GameRenderer {
    * Render sprite to canvas
    */
   renderSprite(sprite, x, y) {
-    if (sprite.image && sprite.image.complete) {
-      this.ctx.drawImage(sprite.image, x, y, sprite.width || 32, sprite.height || 32);
+    if (!sprite || !sprite.image) return;
+
+    try {
+      // For SVG-based placeholder sprites (created via data URI)
+      if (sprite.type === 'placeholder') {
+        // SVG images might not have complete property, so check if it has source
+        if (sprite.image.src) {
+          this.ctx.drawImage(sprite.image, x, y, sprite.width || 32, sprite.height || 32);
+        }
+      } else if (sprite.image.complete) {
+        // For regular PNG/JPG images
+        this.ctx.drawImage(sprite.image, x, y, sprite.width || 32, sprite.height || 32);
+      }
+    } catch (e) {
+      // If image fails to load, draw a fallback rectangle
+      this.ctx.fillStyle = sprite.color || '#999';
+      this.ctx.fillRect(x, y, sprite.width || 32, sprite.height || 32);
+      this.ctx.strokeStyle = '#333';
+      this.ctx.lineWidth = 1;
+      this.ctx.strokeRect(x, y, sprite.width || 32, sprite.height || 32);
     }
   }
 

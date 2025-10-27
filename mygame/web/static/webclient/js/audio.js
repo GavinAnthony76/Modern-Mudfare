@@ -116,24 +116,30 @@ class AudioManager {
   }
 
   /**
-   * Play sound effect
+   * Play sound effect (from file or generated)
    */
   playSFX(soundKey) {
-    if (!this.sounds[soundKey]) return;
+    // Try to load actual audio file first (for real assets like footstep_wood)
+    const audioPath = `/static/webclient/assets/audio/sfx/${soundKey}.mp3`;
+    const audio = new Audio();
+    audio.src = audioPath;
+    audio.volume = this.sfxVolume * this.masterVolume;
 
-    // Use Web Audio API for generated sounds
-    if (this.audioContext && this.sounds[soundKey]) {
-      try {
-        const sound = this.sounds[soundKey]();
-        if (sound) {
-          const gain = this.audioContext.createGain();
-          gain.gain.value = this.sfxVolume * this.masterVolume;
-          gain.connect(this.audioContext.destination);
+    audio.play().catch(e => {
+      // Fallback to generated sounds if file doesn't exist
+      if (this.sounds[soundKey] && this.audioContext) {
+        try {
+          const sound = this.sounds[soundKey]();
+          if (sound) {
+            const gain = this.audioContext.createGain();
+            gain.gain.value = this.sfxVolume * this.masterVolume;
+            gain.connect(this.audioContext.destination);
+          }
+        } catch (err) {
+          console.log('SFX playback error:', err);
         }
-      } catch (e) {
-        console.log('SFX playback error:', e);
       }
-    }
+    });
   }
 
   /**

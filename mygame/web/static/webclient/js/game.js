@@ -65,31 +65,35 @@ class BiblicalMUDGame {
    */
   waitForSpritesLoaded(timeout = 5000) {
     return new Promise((resolve) => {
-      let loaded = true;
-      this.renderer.sprites.forEach(sprite => {
-        if (sprite.image && !sprite.image.complete) {
-          loaded = false;
-        }
-      });
+      // Give SVG sprites a moment to initialize
+      setTimeout(() => {
+        let loaded = true;
+        let spriteCount = 0;
 
-      if (loaded) {
-        resolve();
-      } else {
-        const startTime = Date.now();
-        const checkInterval = setInterval(() => {
-          let allLoaded = true;
-          this.renderer.sprites.forEach(sprite => {
-            if (sprite.image && !sprite.image.complete) {
-              allLoaded = false;
-            }
-          });
-
-          if (allLoaded || Date.now() - startTime > timeout) {
-            clearInterval(checkInterval);
-            resolve();
+        this.renderer.sprites.forEach(sprite => {
+          spriteCount++;
+          // SVG data URIs load immediately, so check if image exists
+          if (sprite.image && !sprite.image.src) {
+            loaded = false;
           }
-        }, 100);
-      }
+        });
+
+        // If sprites exist, consider them loaded
+        if (spriteCount > 0 && loaded) {
+          console.log(`Loaded ${spriteCount} sprites`);
+          resolve();
+        } else {
+          // Try a more lenient approach - just wait a bit then proceed
+          const startTime = Date.now();
+          const checkInterval = setInterval(() => {
+            if (Date.now() - startTime > timeout) {
+              clearInterval(checkInterval);
+              console.log('Sprite loading timeout, proceeding anyway');
+              resolve();
+            }
+          }, 100);
+        }
+      }, 100);
     });
   }
 
@@ -157,10 +161,15 @@ class BiblicalMUDGame {
     if (player.x + 32 > 2560) player.x = 2560 - 32;
     if (player.y + 32 > 1920) player.y = 1920 - 32;
 
-    // Update camera to follow player
+    // Update camera to follow player and play footstep sound
     if (oldX !== player.x || oldY !== player.y) {
       this.renderer.updateCamera(player.x + 16, player.y + 16);
       this.checkCollisions(player);
+
+      // Play footstep sound on movement
+      if (this.audioManager && Math.random() > 0.7) {
+        this.audioManager.playSFX('footstep_wood');
+      }
     }
   }
 
