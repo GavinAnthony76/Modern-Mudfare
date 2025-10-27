@@ -31,6 +31,7 @@ Location: `audio/sfx/`
 - `footstep_stone.wav` - Footstep on stone
 - `footstep_grass.wav` - Footstep on grass
 - `footstep_sand.wav` - Footstep on sand
+- `footstep_wood.wav` - Footstep on wood
 - `jump.wav` - Character jump
 
 **Environmental Sounds**
