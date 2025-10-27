@@ -38,3 +38,15 @@ Evennia's documentation is here:
 https://github.com/evennia/evennia/wiki.
 
 Enjoy!
+
+The issue: Every time you enter Python mode (@py), you start fresh and need to import modules again.
+
+Quick steps:
+
+Type: from world import build_world
+Press Enter
+Type: build_world.build_all()
+Press Enter
+Wait for completion
+Type: quit()
+Type: @find approach

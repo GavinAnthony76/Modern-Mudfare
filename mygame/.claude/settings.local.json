@@ -5,7 +5,9 @@
       "Read(//c/Users/gavin/source/repos/APPS/Modern-Mudfare/**)",
       "Bash(git rev-parse:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []
