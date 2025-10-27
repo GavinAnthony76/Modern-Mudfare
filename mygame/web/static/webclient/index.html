@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journey Through Scripture - Biblical Fantasy MUD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #3498DB;
+            --accent-color: #F39C12;
+            --success-color: #27AE60;
+            --danger-color: #E74C3C;
+            --text-primary: #ECF0F1;
+            --text-secondary: #BDC3C7;
+            --bg-dark: #1A1A1A;
+            --bg-darker: #0F0F0F;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--primary-color) 100%);
+        }
+
+        /* Main game canvas */
+        #gameWrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-dark);
+            border-right: 2px solid var(--accent-color);
+            position: relative;
+        }
+
+        #gameCanvas {
+            flex: 1;
+            display: block;
+            cursor: crosshair;
+            background: linear-gradient(0deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        #gameCanvas:hover {
+            filter: brightness(1.05);
+        }
+
+        /* Game header */
+        #gameHeader {
+            padding: 15px;
+            background: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .connection-status {
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: var(--secondary-color);
+        }
+
+        .connection-status.connected {
+            background: var(--success-color);
+        }
+
+        .connection-status.offline {
+            background: var(--danger-color);
+        }
+
+        /* Message display */
+        #gameMessage {
+            min-height: 60px;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid var(--accent-color);
+            color: var(--text-primary);
+            font-size: 14px;
+            overflow-y: auto;
+            word-wrap: break-word;
+            border-radius: 4px;
+            margin: 0 0 10px 0;
+        }
+
+        /* Right sidebar */
+        #sideBar {
+            width: 300px;
+            background: var(--primary-color);
+            border-left: 2px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Panel styling */
+        .panel {
+            border: 1px solid var(--accent-color);
+            margin: 10px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--secondary-color);
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--accent-color);
+            color: var(--text-primary);
+        }
+
+        .panel-content {
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .panel-item {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+        }
+
+        .panel-item:last-child {
+            border-bottom: none;
+        }
+
+        .panel-item-label {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .panel-item-value {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Stats panel */
+        #statsPanel {
+            order: 1;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-bar {
+            flex: 1;
+            height: 12px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s ease;
+        }
+
+        .stat-bar.danger .stat-bar-fill {
+            background: linear-gradient(90deg, #F44336, #E91E63);
+        }
+
+        /* Inventory panel */
+        #inventoryPanel {
+            order: 2;
+            max-height: 300px;
+        }
+
+        .inventory-item {
+            display: flex;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            align-items: center;
+        }
+
+        .inventory-item-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 2px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .inventory-item-name {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .inventory-item-quantity {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        /* Quest log panel */
+        #questPanel {
+            order: 3;
+            max-height: 250px;
+        }
+
+        .quest-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 11px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .quest-item:hover {
+            color: var(--accent-color);
+        }
+
+        .quest-item.active {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Controls panel */
+        #controlsPanel {
+            order: 4;
+            position: sticky;
+            bottom: 0;
+            margin: auto 10px 10px 10px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px 12px;
+            background: var(--secondary-color);
+            color: var(--text-primary);
+            border: 1px solid var(--accent-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: var(--accent-color);
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.danger {
+            background: var(--danger-color);
+        }
+
+        button.danger:hover {
+            background: #C0392B;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            #sideBar {
+                width: 250px;
+            }
+
+            .panel {
+                margin: 8px;
+            }
+
+            .panel-content {
+                max-height: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #gameContainer {
+                flex-direction: column;
+            }
+
+            #sideBar {
+                width: 100%;
+                height: 25%;
+                border-left: none;
+                border-top: 2px solid var(--accent-color);
+            }
+
+            #gameWrapper {
+                border-right: none;
+                height: 75%;
+            }
+
+            .panel {
+                margin: 5px;
+            }
+
+            .panel-content {
+                max-height: 100px;
+            }
+
+            button {
+                min-width: 60px;
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #gameHeader {
+                padding: 10px;
+            }
+
+            .game-title {
+                font-size: 16px;
+            }
+
+            #sideBar {
+                height: 30%;
+            }
+
+            #gameWrapper {
+                height: 70%;
+            }
+
+            .panel {
+                margin: 3px;
+            }
+
+            .panel-header {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .panel-content {
+                padding: 8px;
+                max-height: 80px;
+                font-size: 11px;
+            }
+        }
+
+        /* Loading screen */
+        #loadingScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: var(--text-primary);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--accent-color);
+            border-top: 3px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Main game area -->
+        <div id="gameWrapper">
+            <div id="gameHeader">
+                <div class="game-title">Journey Through Scripture</div>
+                <div id="connectionStatus" class="connection-status offline">Initializing...</div>
+            </div>
+            <canvas id="gameCanvas"></canvas>
+            <div id="gameMessage">Welcome to the Biblical Fantasy MUD! Click on NPCs to interact with them.</div>
+        </div>
+
+        <!-- Right sidebar with game info -->
+        <div id="sideBar">
+            <!-- Stats Panel -->
+            <div id="statsPanel" class="panel">
+                <div class="panel-header">Character Stats</div>
+                <div class="panel-content">
+                    <div class="stat-row">
+                        <span class="panel-item-label">Name:</span>
+                        <span class="panel-item-value" id="statName">Pilgrim</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="panel-item-label">Level:</span>
+                        <span class="panel-item-value" id="statLevel">1</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="panel-item-label">XP:</span>
+                        <span class="panel-item-value" id="statXP">0 / 100</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="panel-item-label">Health:</span>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" id="healthBarFill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="panel-item-label">Mana:</span>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" style="background: linear-gradient(90deg, #2196F3, #00BCD4); width: 75%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="panel-item-label">Location:</span>
+                        <span class="panel-item-value" id="statLocation">Floor 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Panel -->
+            <div id="inventoryPanel" class="panel">
+                <div class="panel-header">Inventory (5/20)</div>
+                <div class="panel-content">
+                    <div class="inventory-item">
+                        <div class="inventory-item-icon"></div>
+                        <span class="inventory-item-name">Pilgrim's Staff</span>
+                        <span class="inventory-item-quantity">x1</span>
+                    </div>
+                    <div class="inventory-item">
+                        <div class="inventory-item-icon"></div>
+                        <span class="inventory-item-name">Water Pouch</span>
+                        <span class="inventory-item-quantity">x2</span>
+                    </div>
+                    <div class="inventory-item">
+                        <div class="inventory-item-icon"></div>
+                        <span class="inventory-item-name">Holy Scroll</span>
+                        <span class="inventory-item-quantity">x1</span>
+                    </div>
+                    <div class="inventory-item">
+                        <div class="inventory-item-icon"></div>
+                        <span class="inventory-item-name">Healing Herb</span>
+                        <span class="inventory-item-quantity">x3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quest Panel -->
+            <div id="questPanel" class="panel">
+                <div class="panel-header">Active Quests</div>
+                <div class="panel-content">
+                    <div class="quest-item active">
+                        <strong>Find the Truth</strong>
+                        <p style="font-size: 10px; margin-top: 2px;">Find the hidden chamber of the Deceiver</p>
+                    </div>
+                    <div class="quest-item">
+                        <strong>Explore the Palace</strong>
+                        <p style="font-size: 10px; margin-top: 2px;">Discover all rooms on Floor 1</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Panel -->
+            <div id="controlsPanel" class="panel">
+                <div class="panel-header">Actions</div>
+                <div class="panel-content">
+                    <div class="button-group">
+                        <button id="btnAttack">Attack</button>
+                        <button id="btnCast">Cast Spell</button>
+                        <button id="btnUseItem">Use Item</button>
+                    </div>
+                    <div class="button-group" style="margin-top: 8px;">
+                        <button id="btnMap">Map</button>
+                        <button id="btnChat">Chat</button>
+                        <button id="btnSettings">Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading screen -->
+    <div id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+            <p>Journey Through Scripture</p>
+            <p style="font-size: 12px; margin-top: 10px; color: var(--text-secondary);">Loading game world...</p>
+        </div>
+    </div>
+
+    <!-- Script includes -->
+    <script src="/static/webclient/js/renderer.js"></script>
+    <script src="/static/webclient/js/audio.js"></script>
+    <script src="/static/webclient/js/game.js"></script>
+
+    <script>
+        // Hide loading screen when game is ready
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen) {
+                    loadingScreen.style.display = 'none';
+                }
+            }, 1500);
+        });
+
+        // Update UI with game state
+        function updateGameUI() {
+            if (window.game) {
+                const state = window.game.gameState;
+
+                // Update stats
+                document.getElementById('statName').textContent = state.playerName || 'Pilgrim';
+                document.getElementById('statLocation').textContent = state.location || 'Unknown';
+
+                // Update health bar
+                const healthPercent = (state.health / state.maxHealth) * 100;
+                document.getElementById('healthBarFill').style.width = healthPercent + '%';
+
+                // Update connection status
+                const statusEl = document.getElementById('connectionStatus');
+                if (window.game.websocket && window.game.websocket.readyState === WebSocket.OPEN) {
+                    statusEl.className = 'connection-status connected';
+                    statusEl.textContent = 'Connected';
+                } else {
+                    statusEl.className = 'connection-status offline';
+                    statusEl.textContent = 'Demo Mode';
+                }
+            }
+        }
+
+        // Update UI every 100ms
+        setInterval(updateGameUI, 100);
+
+        // Button event listeners
+        document.getElementById('btnAttack').addEventListener('click', () => {
+            if (window.game) {
+                window.game.gameState.status = 'Attacking!';
+                window.game.renderer.addParticle(400, 300, '#FF6B6B');
+            }
+        });
+
+        document.getElementById('btnCast').addEventListener('click', () => {
+            if (window.game) {
+                window.game.gameState.status = 'Casting spell...';
+                window.game.audioManager.playSFX('divine_light');
+                window.game.renderer.addParticle(400, 300, '#FFD700');
+            }
+        });
+
+        document.getElementById('btnUseItem').addEventListener('click', () => {
+            if (window.game) {
+                window.game.gameState.status = 'Used item';
+            }
+        });
+
+        document.getElementById('btnSettings').addEventListener('click', () => {
+            alert('Settings not yet implemented');
+        });
+
+        document.getElementById('btnMap').addEventListener('click', () => {
+            alert('Map not yet implemented');
+        });
+
+        document.getElementById('btnChat').addEventListener('click', () => {
+            const message = prompt('Enter message:', '');
+            if (message) {
+                if (window.game && window.game.websocket && window.game.websocket.readyState === WebSocket.OPEN) {
+                    window.game.websocket.send(JSON.stringify({
+                        action: 'chat',
+                        message: message
+                    }));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
