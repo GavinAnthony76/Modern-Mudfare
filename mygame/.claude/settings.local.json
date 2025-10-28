@@ -6,7 +6,8 @@
       "Bash(for file in web/static/webclient/js/{quests,dialogue,inventory,game}.js)",
       "Bash(do node -c \"$file\")",
       "Bash(echo:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "WebFetch(domain:itch.io)"
     ],
     "deny": [],
     "ask": []

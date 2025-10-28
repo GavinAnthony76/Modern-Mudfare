@@ -2,79 +2,75 @@
   "description": "Asset registry for Journey Through Scripture. Download free open-source assets from OpenGameArt.org and place them in the folders below.",
   "sprites": {
     "player": {
-      "src": "assets/sprites/characters/player.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
-      "frames": 12,
-      "columns": 4,
-      "source": "OpenGameArt.org - LPC Universal Spritesheet"
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Soldier)"
     },
     "npc_priest": {
-      "src": "assets/sprites/characters/npc_priest.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
-      "source": "OpenGameArt.org - LPC Medieval Characters"
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Orc variant)"
     },
     "npc_merchant": {
-      "src": "assets/sprites/characters/npc_merchant.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
-      "source": "OpenGameArt.org - LPC Medieval Characters"
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Soldier variant)"
     },
     "npc_elder": {
-      "src": "assets/sprites/characters/npc_elder.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
-      "source": "OpenGameArt.org - LPC Medieval Characters"
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Elder)"
     },
     "pilgrim": {
-      "src": "assets/sprites/characters/pilgrim.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
-      "source": "OpenGameArt.org - LPC Medieval Characters"
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Walk.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Pilgrim)"
     },
     "deceiver": {
-      "src": "assets/sprites/enemies/deceiver.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "frames": 4,
-      "columns": 4,
-      "source": "OpenGameArt.org - LPC Monsters"
+      "src": "assets/sprites/enemies/Knight/noBKG_KnightIdle_strip.png",
+      "frameWidth": 150,
+      "frameHeight": 150,
+      "source": "OcO - Medieval Fantasy Character Pack (Knight boss)"
     },
     "demon": {
-      "src": "assets/sprites/enemies/demon.png",
-      "frameWidth": 40,
-      "frameHeight": 40,
-      "source": "OpenGameArt.org - LPC Monsters"
+      "src": "assets/sprites/enemies/Knight/noBKG_KnightAttack_strip.png",
+      "frameWidth": 150,
+      "frameHeight": 150,
+      "source": "OcO - Medieval Fantasy Character Pack (Knight enemy)"
     },
     "undead": {
-      "src": "assets/sprites/enemies/undead.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
-      "source": "OpenGameArt.org - LPC Monsters"
+      "src": "assets/sprites/enemies/Knight/noBKG_KnightRun_strip.png",
+      "frameWidth": 150,
+      "frameHeight": 150,
+      "source": "OcO - Medieval Fantasy Character Pack (Knight undead)"
     }
   },
   "tilesets": {
     "palace_floor1": {
-      "src": "assets/tiles/palace/floor1/indoor_tileset.png",
+      "src": "assets/tiles/palace/floor1/Texture/TX Tileset Stone Ground.png",
       "frameWidth": 32,
       "frameHeight": 32,
       "columns": 16,
-      "source": "OpenGameArt.org - LPC Dungeon or Indoor Tileset"
+      "source": "Cainos - Pixel Art Top Down Basic (Stone Ground)"
     },
     "palace_floor2": {
-      "src": "assets/tiles/palace/floor2/indoor_tileset.png",
+      "src": "assets/tiles/palace/floor1/Texture/TX Tileset Wall.png",
       "frameWidth": 32,
       "frameHeight": 32,
       "columns": 16,
-      "source": "OpenGameArt.org - Indoor Tileset"
+      "source": "Cainos - Pixel Art Top Down Basic (Wall)"
     },
     "palace_floor3": {
-      "src": "assets/tiles/palace/floor3/indoor_tileset.png",
+      "src": "assets/tiles/palace/floor1/Texture/TX Tileset Grass.png",
       "frameWidth": 32,
       "frameHeight": 32,
       "columns": 16,
-      "source": "OpenGameArt.org - Indoor Tileset"
+      "source": "Cainos - Pixel Art Top Down Basic (Grass)"
     }
   },
   "items": {
