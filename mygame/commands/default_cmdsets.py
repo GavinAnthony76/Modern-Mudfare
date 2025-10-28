@@ -5,9 +5,10 @@ Command sets for Journey Through Scripture
 from evennia import default_cmds
 from commands.dialogue import CmdTalk, CmdSay, CmdAsk, CmdRead, CmdExamine, CmdLore
 from commands.character import (CmdStats, CmdInventory, CmdUse, CmdEquip,
-                                CmdUnequip, CmdQuests, CmdCalling)
+                                CmdUnequip, CmdCalling)
 from commands.combat import (CmdAttack, CmdDefend, CmdHeal, CmdFlee,
                              CmdCombatStatus, CmdFight)
+from commands.quests import CmdQuests, CmdAccept, CmdAbandon, CmdQuestInfo
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
@@ -26,8 +27,12 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         self.add(CmdUse())
         self.add(CmdEquip())
         self.add(CmdUnequip())
-        self.add(CmdQuests())
         self.add(CmdCalling())
+        # Quest commands
+        self.add(CmdQuests())
+        self.add(CmdAccept())
+        self.add(CmdAbandon())
+        self.add(CmdQuestInfo())
         # Combat commands
         self.add(CmdAttack())
         self.add(CmdDefend())

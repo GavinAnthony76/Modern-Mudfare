@@ -5,6 +5,7 @@ Player characters with biblical fantasy stats and progression
 
 from evennia import DefaultCharacter
 from evennia.utils.utils import inherits_from
+from mygame.quests import QuestManager, create_quest
 
 
 class Character(DefaultCharacter):
@@ -60,6 +61,11 @@ class Character(DefaultCharacter):
         # Dialogue state
         self.db.talking_to = None
         self.db.dialogue_state = None
+
+        # Quest system
+        self.db.quests = {}  # Available quests
+        self.db.quest_log = {}  # Active/completed quests
+        self.quest_manager = QuestManager(self)
 
     def set_class(self, class_name):
         """

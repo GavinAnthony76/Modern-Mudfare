@@ -152,6 +152,19 @@ class CombatHandler:
             self.attacker.send_text_output(f"Victory! You defeated {self.defender.name}!", 'success')
             self.attacker.send_text_output(f"You gained {xp_reward} XP and {currency_reward} shekels!", 'success')
 
+            # Update quests that require defeating this creature
+            creature_type = getattr(self.defender.db, 'creature_type', None)
+            if creature_type and hasattr(self.attacker, 'quest_manager'):
+                for quest in self.attacker.quest_manager.get_active_quests():
+                    for obj in quest.objectives:
+                        if (obj.get("type") == "kill_creature" and
+                            obj.get("creature_type") == creature_type):
+                            self.attacker.quest_manager.update_quest_progress(
+                                quest.id,
+                                obj["id"],
+                                1
+                            )
+
             # Send combat end event
             self.attacker.send_to_web_client({
                 "type": "combat_event",
@@ -274,6 +287,7 @@ class Creature:
         base_stats['xp_reward'] = int(base_stats['xp_reward'] * level_multiplier)
         base_stats['currency_reward'] = int(base_stats['currency_reward'] * level_multiplier)
         base_stats['level'] = level
+        base_stats['creature_type'] = creature_type  # Store the type
 
         return base_stats
 
