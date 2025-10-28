@@ -373,9 +373,12 @@ class GameRenderer {
     }
 
     // For regular images, try to draw the image
-    if (sprite.image && sprite.image.complete) {
+    if (sprite.image && sprite.image.complete && sprite.image.naturalHeight > 0) {
       try {
-        this.ctx.drawImage(sprite.image, x, y, width, height);
+        // Use sprite dimensions if available, otherwise use defaults
+        const displayWidth = sprite.width || width || 32;
+        const displayHeight = sprite.height || height || 32;
+        this.ctx.drawImage(sprite.image, x, y, displayWidth, displayHeight);
         return;
       } catch (e) {
         console.log('Error drawing image:', e);

@@ -5,48 +5,64 @@
       "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png",
       "frameWidth": 100,
       "frameHeight": 100,
+      "width": 100,
+      "height": 100,
       "source": "Zerie - Tiny RPG Character Asset Pack (Soldier)"
     },
     "npc_priest": {
       "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png",
       "frameWidth": 100,
       "frameHeight": 100,
+      "width": 100,
+      "height": 100,
       "source": "Zerie - Tiny RPG Character Asset Pack (Orc variant)"
     },
     "npc_merchant": {
-      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png",
-      "frameWidth": 100,
-      "frameHeight": 100,
-      "source": "Zerie - Tiny RPG Character Asset Pack (Soldier variant)"
-    },
-    "npc_elder": {
-      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png",
-      "frameWidth": 100,
-      "frameHeight": 100,
-      "source": "Zerie - Tiny RPG Character Asset Pack (Elder)"
-    },
-    "pilgrim": {
       "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Walk.png",
       "frameWidth": 100,
       "frameHeight": 100,
+      "width": 100,
+      "height": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Soldier variant)"
+    },
+    "npc_elder": {
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Attack01.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "width": 100,
+      "height": 100,
+      "source": "Zerie - Tiny RPG Character Asset Pack (Elder)"
+    },
+    "pilgrim": {
+      "src": "assets/sprites/characters/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Attack01.png",
+      "frameWidth": 100,
+      "frameHeight": 100,
+      "width": 100,
+      "height": 100,
       "source": "Zerie - Tiny RPG Character Asset Pack (Pilgrim)"
     },
     "deceiver": {
       "src": "assets/sprites/enemies/Knight/noBKG_KnightIdle_strip.png",
       "frameWidth": 150,
       "frameHeight": 150,
+      "width": 150,
+      "height": 150,
       "source": "OcO - Medieval Fantasy Character Pack (Knight boss)"
     },
     "demon": {
       "src": "assets/sprites/enemies/Knight/noBKG_KnightAttack_strip.png",
       "frameWidth": 150,
       "frameHeight": 150,
+      "width": 150,
+      "height": 150,
       "source": "OcO - Medieval Fantasy Character Pack (Knight enemy)"
     },
     "undead": {
       "src": "assets/sprites/enemies/Knight/noBKG_KnightRun_strip.png",
       "frameWidth": 150,
       "frameHeight": 150,
+      "width": 150,
+      "height": 150,
       "source": "OcO - Medieval Fantasy Character Pack (Knight undead)"
     }
   },
