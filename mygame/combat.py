@@ -5,8 +5,10 @@ Handles turn-based combat mechanics, damage calculation, and combat events.
 """
 
 import random
+import logging
 from evennia.utils.utils import inherits_from
-from evennia import logger
+
+logger = logging.getLogger(__name__)
 
 
 class CombatHandler:

@@ -1,5 +1,10 @@
 """
-Web plugin hooks.
+Web plugin hooks for Journey Through Scripture.
+
+WebSocket Integration:
+    - WebSocket is configured in settings.py (WEBSOCKET_CLIENT_PORT = 4001)
+    - Real-time message handlers are in mygame.web.websocket_plugin
+    - Client connects to ws://localhost:4001/ws
 """
 
 
