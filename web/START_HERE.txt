@@ -1,0 +1,79 @@
+╔════════════════════════════════════════════════════════════╗
+║                  JOURNEY THROUGH SCRIPTURE                  ║
+║                  Biblical Fantasy MUD Game                  ║
+╚════════════════════════════════════════════════════════════╝
+
+HOW TO PLAY:
+
+1. Windows Users:
+   → Double-click: RUN_GAME.bat
+
+2. Mac/Linux Users:
+   → Terminal: ./run_game.sh
+
+3. Browser will open to: http://localhost:8000
+
+That's it! The game will load with your character sprites and tilesets.
+
+═══════════════════════════════════════════════════════════════
+
+WHAT YOU'LL SEE:
+
+✓ Beautiful character creation screen
+✓ Choose class: Prophet, Warrior, Shepherd, or Scribe
+✓ Enter a biblical name (David, Ruth, Joshua, etc.)
+✓ Play the game in demo mode
+
+═══════════════════════════════════════════════════════════════
+
+GAME FEATURES:
+
+✓ Real sprite graphics (your downloaded assets!)
+✓ Real tileset graphics for the palace
+✓ NPC interactions and dialogue
+✓ Quest system with objectives
+✓ Inventory and stat tracking
+✓ Mobile-responsive design
+✓ Sound effects and music
+
+═══════════════════════════════════════════════════════════════
+
+CONTROLS:
+
+Arrow Keys / WASD  → Move
+Mouse Click        → Talk to NPCs
+Buttons            → Perform actions
+Type Commands      → Enter text commands
+
+═══════════════════════════════════════════════════════════════
+
+TROUBLESHOOTING:
+
+Problem: Port 8000 already in use
+Solution: Edit RUN_GAME.bat and change 8000 to 8001, 8002, etc.
+
+Problem: Python not found
+Solution: Make sure Python is installed (python.org)
+         Then try: python -m http.server 8000
+
+Problem: Scripts don't open
+Solution: Read QUICKSTART.md for manual instructions
+
+═══════════════════════════════════════════════════════════════
+
+NEXT STEPS:
+
+1. Create a character
+2. Explore the game world
+3. Talk to NPCs
+4. Complete quests
+5. Have fun! 🎮
+
+═══════════════════════════════════════════════════════════════
+
+For more information, see:
+- QUICKSTART.md (detailed setup guide)
+- /docs/ folder (full documentation)
+- index.html (the actual game)
+
+Ready? Double-click RUN_GAME.bat or run run_game.sh now!

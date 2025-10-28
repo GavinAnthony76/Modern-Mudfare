@@ -65,12 +65,51 @@ class GameRenderer {
         // Player sprite
         this.player.sprite = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#4169e1');
 
-        // Ground tiles
-        this.tiles.desert = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#f4a460');
-        this.tiles.grass = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#90ee90');
-        this.tiles.stone = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#808080');
+        // Ground tiles (palace theme)
+        this.tiles.palace_floor1 = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#8B8680');
+        this.tiles.palace_floor2 = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#A9A5A0');
+        this.tiles.palace_floor3 = this.createPlaceholderSprite(this.tileSize, this.tileSize, '#90EE90');
 
         this.loaded = true;
+    }
+
+    async loadRealAssets(assetsConfig) {
+        if (!assetsConfig) {
+            console.log('No assets config provided, using placeholders');
+            return;
+        }
+
+        // Load player sprite
+        if (assetsConfig.sprites && assetsConfig.sprites.player) {
+            const playerImg = new Image();
+            playerImg.onload = () => {
+                this.player.sprite = playerImg;
+                this.player.spriteWidth = assetsConfig.sprites.player.width || 100;
+                this.player.spriteHeight = assetsConfig.sprites.player.height || 100;
+                console.log(`Loaded player sprite (${this.player.spriteWidth}x${this.player.spriteHeight})`);
+            };
+            playerImg.onerror = () => {
+                console.error('Failed to load player sprite');
+            };
+            playerImg.src = assetsConfig.sprites.player.src;
+        }
+
+        // Load tile sprites
+        if (assetsConfig.tilesets) {
+            if (assetsConfig.tilesets.palace_floor1) {
+                const tileImg = new Image();
+                tileImg.onload = () => {
+                    this.tiles.palace_floor1 = tileImg;
+                    this.tiles.palace_floor2 = tileImg;
+                    this.tiles.palace_floor3 = tileImg;
+                    console.log('Loaded tileset');
+                };
+                tileImg.onerror = () => {
+                    console.error('Failed to load tileset');
+                };
+                tileImg.src = assetsConfig.tilesets.palace_floor1.src;
+            }
+        }
     }
 
     createPlaceholderSprite(width, height, color) {
@@ -121,10 +160,22 @@ class GameRenderer {
                 const tileX = (x - startX) * this.tileSize;
                 const tileY = (y - startY) * this.tileSize;
 
-                // Use desert tile as default
-                const tile = this.tiles.desert;
+                // Use palace floor tile as default
+                const tile = this.tiles.palace_floor1;
                 if (tile) {
-                    this.ctx.drawImage(tile, tileX, tileY);
+                    try {
+                        // For Image objects, use proper dimensions
+                        if (tile instanceof HTMLImageElement) {
+                            this.ctx.drawImage(tile, tileX, tileY, this.tileSize, this.tileSize);
+                        } else {
+                            // For canvas placeholders
+                            this.ctx.drawImage(tile, tileX, tileY);
+                        }
+                    } catch (e) {
+                        // Fallback to placeholder if image loading fails
+                        this.ctx.fillStyle = '#8B8680';
+                        this.ctx.fillRect(tileX, tileY, this.tileSize, this.tileSize);
+                    }
                 }
             }
         }
@@ -132,11 +183,41 @@ class GameRenderer {
 
     renderPlayer() {
         if (this.player.sprite) {
-            this.ctx.drawImage(
-                this.player.sprite,
-                this.player.x - this.tileSize / 2,
-                this.player.y - this.tileSize / 2
-            );
+            try {
+                // Use configured sprite dimensions, or fall back to tileSize
+                const spriteWidth = this.player.spriteWidth || this.tileSize;
+                const spriteHeight = this.player.spriteHeight || this.tileSize;
+                const spriteX = this.player.x - spriteWidth / 2;
+                const spriteY = this.player.y - spriteHeight / 2;
+
+                // For Image objects, use proper dimensions
+                if (this.player.sprite instanceof HTMLImageElement) {
+                    this.ctx.drawImage(
+                        this.player.sprite,
+                        spriteX,
+                        spriteY,
+                        spriteWidth,
+                        spriteHeight
+                    );
+                } else {
+                    // For canvas placeholders
+                    this.ctx.drawImage(
+                        this.player.sprite,
+                        spriteX,
+                        spriteY
+                    );
+                }
+            } catch (e) {
+                console.error('Error rendering player sprite:', e);
+                // Fallback to placeholder
+                this.ctx.fillStyle = '#4169e1';
+                this.ctx.fillRect(
+                    this.player.x - this.tileSize / 2,
+                    this.player.y - this.tileSize / 2,
+                    this.tileSize,
+                    this.tileSize
+                );
+            }
         }
 
         // Draw player name above sprite
@@ -146,7 +227,7 @@ class GameRenderer {
         this.ctx.fillText(
             'You',
             this.player.x,
-            this.player.y - this.tileSize
+            this.player.y - (this.player.spriteHeight || this.tileSize)
         );
     }
 

@@ -84,9 +84,20 @@ A graphical Multi-User Dungeon (MUD) game set in a biblical fantasy world, featu
    This creates all 30+ rooms, 50+ items, and 20+ NPCs!
 
 7. **Access the game**
-   - **Evennia Web Client**: `http://localhost:4001`
-   - **Custom Graphical Client**: Open `web/index.html` in browser
-   - **Telnet**: `telnet localhost 4000`
+   - **Graphical Client** (Recommended): Open `web/index.html` in your browser
+   - **Evennia Web Client** (if server running): `http://localhost:4001`
+   - **Telnet** (if server running): `telnet localhost 4000`
+
+### Quick Play (No Server Setup)
+
+**Option 1: With Assets (Recommended)**
+1. Go to the `web/` folder
+2. **Windows**: Double-click `RUN_GAME.bat`
+3. **Mac/Linux**: Run `./run_game.sh` in terminal
+4. Open `http://localhost:8000` in your browser
+
+**Option 2: Quick Start (File-based, no assets)**
+Simply open `web/index.html` directly in your browser (assets won't load due to browser security, but game runs with placeholders)
 
 See **[docs/EVENNIA_INTEGRATION.md](docs/EVENNIA_INTEGRATION.md)** for detailed setup guide.
 
@@ -94,7 +105,7 @@ See **[docs/EVENNIA_INTEGRATION.md](docs/EVENNIA_INTEGRATION.md)** for detailed 
 
 ```
 Modern-Mudfare/
-├── server/                          # Backend game server
+├── mygame/                          # Evennia server (optional multiplayer backend)
 │   ├── typeclasses/                 # Custom Evennia typeclasses
 │   │   ├── rooms.py                 # Room types (Safe, Boss, Hidden)
 │   │   ├── objects.py               # Items (Weapon, Consumable, Key)
@@ -108,10 +119,12 @@ Modern-Mudfare/
 │   ├── commands/                    # Custom commands
 │   │   ├── dialogue.py              # Talk, Ask, Read, Examine
 │   │   └── character.py             # Stats, Inventory, Equip, Use
-│   └── README.md                    # Backend integration guide
+│   └── manage.py                    # Django management script
 │
-├── web/                             # Custom graphical web client
-│   ├── index.html                   # Main game page
+├── web/                             # Main graphical game (START HERE!)
+│   ├── index.html                   # Main game page (open in browser)
+│   ├── assets.json                  # Asset configuration
+│   ├── assets/                      # Game sprites, tilesets, audio
 │   ├── css/
 │   │   ├── style.css                # Core styling
 │   │   └── mobile.css               # Responsive mobile design
@@ -127,8 +140,9 @@ Modern-Mudfare/
 │   ├── WORLD_DESIGN.md              # World structure and lore
 │   ├── SETUP.md                     # Detailed setup guide
 │   ├── EVENNIA_INTEGRATION.md       # Integration walkthrough
-│   └── API.md                       # Client-server API (TODO)
+│   └── ASSET_*.md                   # Asset guides
 │
+├── venv/                            # Python virtual environment
 ├── setup_evennia.sh                 # Automated setup script
 ├── requirements.txt                 # Python dependencies
 ├── .gitignore                       # Git ignore rules

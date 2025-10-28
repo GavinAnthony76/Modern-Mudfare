@@ -7,7 +7,16 @@
       "Bash(do node -c \"$file\")",
       "Bash(echo:*)",
       "Bash(done)",
-      "WebFetch(domain:itch.io)"
+      "WebFetch(domain:itch.io)",
+      "Bash(powershell -Command:*)",
+      "Bash(copy \"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\mygame\\web\\static\\webclient\\assets.json\" \"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\web\\assets.json\")",
+      "Bash(python manage.py shell:*)",
+      "Bash(\"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\venv\\Scripts\\evennia.exe\" --help)",
+      "Bash(\"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\venv\\Scripts\\evennia.exe\" start)",
+      "Bash(\"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\venv\\Scripts\\evennia.exe\" --init biblical_mud_clean)",
+      "Bash(\"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\venv\\Scripts\\evennia.exe\" migrate)",
+      "Bash(\"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\venv\\Scripts\\python.exe\" manage.py createsuperuser --noinput --username admin --email admin@biblical-mud.local)",
+      "Bash(\"C:\\Users\\gavin\\source\\repos\\APPS\\Modern-Mudfare\\Modern-Mudfare\\venv\\Scripts\\evennia.exe\" shell -c \"from evennia.accounts.models import AccountDB; AccountDB.objects.create_user(''''admin'''', ''''admin@test.local'''', ''''admin'''')\")"
     ],
     "deny": [],
     "ask": []

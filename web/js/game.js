@@ -30,7 +30,7 @@ class Game {
         this.init();
     }
 
-    init() {
+    async init() {
         console.log('Initializing Journey Through Scripture...');
 
         // Set up event listeners
@@ -41,6 +41,23 @@ class Game {
 
         // Initialize audio (user interaction required)
         this.audio.init();
+
+        // Load real assets from assets.json (CORS-safe)
+        try {
+            // Only attempt to fetch if not on file:// protocol
+            if (window.location.protocol !== 'file:') {
+                const response = await fetch('assets.json');
+                const assetsConfig = await response.json();
+                console.log('Loaded assets.json, attempting to load real assets...');
+                await this.renderer.loadRealAssets(assetsConfig);
+            } else {
+                console.log('Running from file:// - use a local web server for asset loading');
+                console.log('Quick fix: python -m http.server 8000');
+            }
+        } catch (e) {
+            console.error('Failed to load assets.json:', e);
+            console.log('Continuing with placeholder graphics...');
+        }
 
         console.log('Game initialized successfully');
     }
@@ -216,9 +233,9 @@ class Game {
     }
 
     startGame() {
-        this.showLoading('Connecting to server...');
+        this.showLoading('Loading game...');
 
-        // Try to connect to Evennia server
+        // Try to connect to Evennia server (optional - game works offline too)
         // Default Evennia WebSocket: ws://localhost:4001/ws
         this.websocket.connect('ws://localhost:4001/ws')
             .then(() => {
@@ -239,18 +256,16 @@ class Game {
             .catch((error) => {
                 console.error('Failed to connect:', error);
                 this.hideLoading();
-                this.ui.showNotification('Could not connect to server. Running in offline mode.', 'warning');
 
-                // Start in offline/demo mode
+                // Start in offline/demo mode (NO notification needed - it's normal)
                 this.showScreen('game');
                 this.gameState.inGame = true;
                 this.startGameLoop();
 
-                this.ui.addTextOutput('=== OFFLINE DEMO MODE ===', 'system');
-                this.ui.addTextOutput(`Welcome ${this.gameState.character.name}, the ${this.gameState.character.class}!`, 'narrative');
-                this.ui.addTextOutput('You stand at the edge of the Desert Wilderness.', 'narrative');
-                this.ui.addTextOutput('Ancient sands stretch before you, endless and mysterious.', 'narrative');
-                this.ui.addTextOutput('(Server not running - this is a demo. Start Evennia server to play online)', 'system');
+                this.ui.addTextOutput(`Welcome ${this.gameState.character.name}, the ${this.gameState.character.class}!`, 'system');
+                this.ui.addTextOutput('You stand at the edge of a vast palace.', 'narrative');
+                this.ui.addTextOutput('Ancient stones stretch before you, mysterious and beautiful.', 'narrative');
+                this.ui.addTextOutput('Type "help" for available commands.', 'system');
             });
     }
 
@@ -332,10 +347,109 @@ class Game {
 
         // Handle different message types
         if (data.type === 'text') {
-            this.ui.addTextOutput(data.text, 'narrative');
+            const textClass = data.class || 'narrative';
+            this.ui.addTextOutput(data.text, textClass);
         } else if (data.type === 'error') {
-            this.ui.addTextOutput(data.text, 'system');
+            this.ui.addTextOutput(data.message || data.text, 'error');
+        } else if (data.type === 'character_update') {
+            this.onCharacterUpdate(data.character);
+        } else if (data.type === 'room_update') {
+            this.onRoomUpdate(data.room);
+        } else if (data.type === 'notification') {
+            this.ui.showNotification(data.message, data.class || 'info');
+        } else if (data.type === 'combat_event') {
+            this.onCombatEvent(data);
+        } else if (data.type === 'dialogue') {
+            this.onDialogue(data);
+        } else if (data.type === 'quest_update') {
+            this.onQuestUpdate(data.quest);
+        } else if (data.type === 'pong') {
+            // Ignore pong responses
         }
+    }
+
+    onCharacterUpdate(character) {
+        console.log('Character update:', character);
+
+        // Update UI with character stats
+        this.gameState.character = Object.assign(
+            this.gameState.character || {},
+            character
+        );
+
+        // Update visible stats panels if they exist
+        const statsPanel = document.getElementById('stats-panel');
+        if (statsPanel && statsPanel.classList.contains('active')) {
+            this.ui.updateStatsDisplay(character);
+        }
+
+        const inventoryPanel = document.getElementById('inventory-panel');
+        if (inventoryPanel && inventoryPanel.classList.contains('active')) {
+            this.ui.updateInventoryDisplay(character.inventory || []);
+        }
+    }
+
+    onRoomUpdate(room) {
+        console.log('Room update:', room);
+
+        // Update game state with room info
+        this.gameState.currentRoom = room;
+
+        // Display room description
+        if (room.description) {
+            this.ui.addTextOutput(room.name, 'system');
+            this.ui.addTextOutput(room.description, 'narrative');
+        }
+
+        // Update renderer with new room state
+        if (this.renderer) {
+            this.renderer.setCurrentRoom(room);
+        }
+    }
+
+    onCombatEvent(event) {
+        console.log('Combat event:', event);
+
+        const eventType = event.event;
+
+        if (eventType === 'combat_started') {
+            this.gameState.inCombat = true;
+            this.ui.showCombatUI(event.enemy);
+            this.ui.addTextOutput(`Combat started! You face ${event.enemy.name}!`, 'combat');
+        } else if (eventType === 'combat_action') {
+            this.ui.addTextOutput(event.message, 'combat');
+        } else if (eventType === 'health_updated') {
+            this.ui.updateCombatHealth(event.attacker_health, event.target_health);
+        } else if (eventType === 'combat_ended') {
+            this.gameState.inCombat = false;
+            this.ui.hideCombatUI();
+
+            if (event.victory) {
+                this.ui.addTextOutput('Victory! You have defeated your enemy!', 'success');
+                if (event.xp_gained) {
+                    this.ui.addTextOutput(`You gained ${event.xp_gained} experience!`, 'success');
+                }
+            } else {
+                this.ui.addTextOutput('You have been defeated...', 'error');
+            }
+        }
+    }
+
+    onDialogue(data) {
+        console.log('Dialogue:', data);
+
+        this.ui.showDialogue({
+            npcName: data.npc_name,
+            text: data.dialogue,
+            options: data.options
+        });
+    }
+
+    onQuestUpdate(quest) {
+        console.log('Quest update:', quest);
+
+        // Update quest in UI
+        this.ui.updateQuest(quest);
     }
 
     onServerError(error) {

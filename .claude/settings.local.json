@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplement full WebSocket communication and turn-based combat system\n\nMajor Features Added:\n- WebSocket protocol: 12+ message types for real-time communication\n- Combat system: Turn-based combat with 7 enemy creature types\n- Combat commands: attack, defend, heal, flee, status, fight\n- Damage calculation: Strength-based with variance and accuracy system\n- XP/progression: Creature rewards scale with level\n- Web client integration: Enhanced game.js with message handlers\n- Character enhancements: WebSocket methods for state synchronization\n\nNew Files:\n- mygame/combat.py (280 lines) - Core combat engine\n- mygame/commands/combat.py (180 lines) - Combat commands\n- mygame/web/websocket_plugin.py (200+ lines) - WebSocket handlers\n- docs/WEBSOCKET_PROTOCOL.md - Complete protocol specification\n- docs/WEBSOCKET_COMBAT_INTEGRATION.md - Integration guide\n- docs/IMPLEMENTATION_SUMMARY.md - Implementation details\n- COMBAT_QUICK_START.md - Quick start guide\n\nModified Files:\n- mygame/typeclasses/characters.py - Added WebSocket methods\n- mygame/commands/default_cmdsets.py - Added combat commands\n- web/js/game.js - Enhanced message handling\n- web/js/renderer.js - Minor updates\n\nCombat System Features:\n✅ Damage calculation with ±20% variance\n✅ Accuracy system based on courage stats\n✅ 7 enemy types (orc, demon, leviathan, behemoth, nephilim, dark_knight, serpent)\n✅ Level scaling for creatures\n✅ XP and currency rewards\n✅ Real-time health updates\n✅ Defend/heal/flee actions\n✅ WebSocket event messaging\n\nThis enables players to engage in full combat encounters through the web client\nwith real-time server synchronization and turn-based gameplay mechanics.\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

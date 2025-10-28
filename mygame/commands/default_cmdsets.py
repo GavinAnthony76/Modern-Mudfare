@@ -6,6 +6,8 @@ from evennia import default_cmds
 from commands.dialogue import CmdTalk, CmdSay, CmdAsk, CmdRead, CmdExamine, CmdLore
 from commands.character import (CmdStats, CmdInventory, CmdUse, CmdEquip,
                                 CmdUnequip, CmdQuests, CmdCalling)
+from commands.combat import (CmdAttack, CmdDefend, CmdHeal, CmdFlee,
+                             CmdCombatStatus, CmdFight)
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
@@ -26,3 +28,10 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         self.add(CmdUnequip())
         self.add(CmdQuests())
         self.add(CmdCalling())
+        # Combat commands
+        self.add(CmdAttack())
+        self.add(CmdDefend())
+        self.add(CmdHeal())
+        self.add(CmdFlee())
+        self.add(CmdCombatStatus())
+        self.add(CmdFight())
