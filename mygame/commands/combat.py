@@ -6,7 +6,18 @@ Commands for combat actions: attack, defend, heal, flee, etc.
 
 from evennia import Command
 from evennia.utils.utils import inherits_from
-from mygame.combat import start_combat, continue_combat
+
+# Handle imports in both direct and Evennia contexts
+try:
+    from ..combat import start_combat, continue_combat
+except (ImportError, ValueError):
+    # Fallback for Evennia's module loading context
+    import os
+    import sys
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if parent_dir not in sys.path:
+        sys.path.insert(0, parent_dir)
+    from combat import start_combat, continue_combat
 
 
 class CombatCommand(Command):

@@ -3,12 +3,28 @@ Command sets for Journey Through Scripture
 """
 
 from evennia import default_cmds
-from mygame.commands.dialogue import CmdTalk, CmdSay, CmdAsk, CmdRead, CmdExamine, CmdLore
-from mygame.commands.character import (CmdStats, CmdInventory, CmdUse, CmdEquip,
-                                       CmdUnequip, CmdCalling)
-from mygame.commands.combat import (CmdAttack, CmdDefend, CmdHeal, CmdFlee,
-                                    CmdCombatStatus, CmdFight)
-from mygame.commands.quests import CmdQuests, CmdAccept, CmdAbandon, CmdQuestInfo
+
+# Handle imports in both direct and Evennia contexts
+try:
+    from .dialogue import CmdTalk, CmdSay, CmdAsk, CmdRead, CmdExamine, CmdLore
+    from .character import (CmdStats, CmdInventory, CmdUse, CmdEquip,
+                           CmdUnequip, CmdCalling)
+    from .combat import (CmdAttack, CmdDefend, CmdHeal, CmdFlee,
+                        CmdCombatStatus, CmdFight)
+    from .quests import CmdQuests, CmdAccept, CmdAbandon, CmdQuestInfo
+except (ImportError, ValueError):
+    # Fallback for Evennia's module loading context
+    from dialogue import CmdTalk, CmdSay, CmdAsk, CmdRead, CmdExamine, CmdLore
+    from character import (CmdStats, CmdInventory, CmdUse, CmdEquip,
+                          CmdUnequip, CmdCalling)
+    from combat import (CmdAttack, CmdDefend, CmdHeal, CmdFlee,
+                       CmdCombatStatus, CmdFight)
+    from quests import CmdQuests, CmdAccept, CmdAbandon, CmdQuestInfo
+
+
+class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):
+    """Cmdset available to unloggedin users."""
+    key = "DefaultUnloggedin"
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):

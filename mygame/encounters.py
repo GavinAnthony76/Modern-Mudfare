@@ -6,7 +6,15 @@ Defines where creatures spawn and how often.
 """
 
 import random
-from mygame.combat import Creature
+
+# Import combat system - handle Evennia's module loading
+try:
+    from .combat import Creature
+except (ImportError, ValueError):
+    try:
+        from combat import Creature
+    except ImportError:
+        Creature = None
 
 
 class Encounter:

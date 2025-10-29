@@ -5,7 +5,30 @@ Player characters with biblical fantasy stats and progression
 
 from evennia import DefaultCharacter
 from evennia.utils.utils import inherits_from
-from mygame.quests import QuestManager, create_quest
+
+# Import quest system - delayed import to handle Evennia's module loading
+def _import_quests():
+    """Lazy import of quests to handle Evennia's module context"""
+    import sys
+    if 'mygame.quests' in sys.modules:
+        quests_module = sys.modules['mygame.quests']
+        return quests_module.QuestManager, quests_module.create_quest
+
+    # Try direct import
+    try:
+        from quests import QuestManager, create_quest as cq
+        return QuestManager, cq
+    except ImportError:
+        # This will be loaded at runtime
+        return None, None
+
+# Import at module level but handle ImportError
+try:
+    from quests import QuestManager, create_quest
+except (ImportError, ValueError):
+    # Will be imported dynamically at runtime
+    QuestManager = None
+    create_quest = None
 
 
 class Character(DefaultCharacter):
@@ -65,7 +88,11 @@ class Character(DefaultCharacter):
         # Quest system
         self.db.quests = {}  # Available quests
         self.db.quest_log = {}  # Active/completed quests
-        self.quest_manager = QuestManager(self)
+        if QuestManager:
+            self.quest_manager = QuestManager(self)
+        else:
+            # Lazy load quest manager at runtime
+            self.quest_manager = None
 
     def set_class(self, class_name):
         """

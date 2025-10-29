@@ -5,7 +5,18 @@ Commands for managing quests: quests, accept, abandon, complete
 """
 
 from evennia import Command
-from mygame.quests import create_quest, QuestStatus
+
+# Handle imports in both direct and Evennia contexts
+try:
+    from ..quests import create_quest, QuestStatus
+except (ImportError, ValueError):
+    # Fallback for Evennia's module loading context
+    import os
+    import sys
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if parent_dir not in sys.path:
+        sys.path.insert(0, parent_dir)
+    from quests import create_quest, QuestStatus
 
 
 class CmdQuests(Command):
