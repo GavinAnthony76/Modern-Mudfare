@@ -9,7 +9,8 @@
       "Bash(timeout 20 evennia start:*)",
       "Bash(evennia status:*)",
       "Bash(evennia restart:*)",
-      "Bash(timeout 30 evennia shell:*)"
+      "Bash(timeout 30 evennia shell:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
